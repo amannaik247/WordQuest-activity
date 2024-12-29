@@ -65,7 +65,11 @@ class WordleActivity(activity.Activity):
         self.word_to_guess = "APPLE"  # Example word
         self.guesses = []
         self.max_attempts = 6
-        
+
+        # Create the main VBox
+        self.vbox = Gtk.VBox(spacing=6)
+        self.set_canvas(self.vbox)
+
         # Create UI components
         self.create_ui()
 
@@ -73,17 +77,17 @@ class WordleActivity(activity.Activity):
         """Create the user interface for the game."""
         # Create a grid for guesses
         self.grid = Gtk.Grid()
-        self.add(self.grid)
-        
+        self.vbox.pack_start(self.grid, True, True, 0)
+
         # Create input field for guesses
         self.entry = Gtk.Entry()
         self.grid.attach(self.entry, 0, self.max_attempts, 5, 1)
-        
+
         # Create a submit button
         submit_button = Gtk.Button(label="Submit")
         submit_button.connect("clicked", self.on_submit)
         self.grid.attach(submit_button, 5, self.max_attempts, 1, 1)
-        
+
         # Create labels for feedback
         self.feedback_labels = []
         for i in range(self.max_attempts):
@@ -104,7 +108,6 @@ class WordleActivity(activity.Activity):
 
     def check_guess(self, guess):
         """Check the user's guess against the word to guess."""
-        # Logic to check the guess and update feedback labels
         for i, letter in enumerate(guess):
             if letter == self.word_to_guess[i]:
                 self.feedback_labels[len(self.guesses) - 1][i].set_text(letter)
@@ -115,7 +118,7 @@ class WordleActivity(activity.Activity):
             else:
                 self.feedback_labels[len(self.guesses) - 1][i].set_text(letter)
                 self.feedback_labels[len(self.guesses) - 1][i].set_markup("<span foreground='red'>{}</span>".format(letter))
-        
+
         if guess == self.word_to_guess:
             self.show_winner_message()
 
