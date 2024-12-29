@@ -14,52 +14,73 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-"""HelloWorld Activity: A case study for developing an activity."""
-
-import gi
-gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
-
-from gettext import gettext as _
-
-from sugar3.activity import activity
-from sugar3.graphics.toolbarbox import ToolbarBox
-from sugar3.activity.widgets import StopButton
-from sugar3.activity.widgets import ActivityToolbarButton
-
-
-class HelloWorldActivity(activity.Activity):
-    """HelloWorldActivity class as specified in activity.info"""
+class WordleActivity(activity.Activity):
+    """WordleActivity class for a Wordle-like game."""
 
     def __init__(self, handle):
-        """Set up the HelloWorld activity."""
+        """Set up the Wordle activity."""
         activity.Activity.__init__(self, handle)
+        
+        # Initialize game variables
+        self.word_to_guess = "APPLE"  # Example word
+        self.guesses = []
+        self.max_attempts = 6
+        
+        # Create UI components
+        self.create_ui()
 
-        # we do not have collaboration features
-        # make the share option insensitive
-        self.max_participants = 1
+    def create_ui(self):
+        """Create the user interface for the game."""
+        # Create a grid for guesses
+        self.grid = Gtk.Grid()
+        self.add(self.grid)
+        
+        # Create input field for guesses
+        self.entry = Gtk.Entry()
+        self.grid.attach(self.entry, 0, self.max_attempts, 5, 1)
+        
+        # Create a submit button
+        submit_button = Gtk.Button(label="Submit")
+        submit_button.connect("clicked", self.on_submit)
+        self.grid.attach(submit_button, 5, self.max_attempts, 1, 1)
+        
+        # Create labels for feedback
+        self.feedback_labels = []
+        for i in range(self.max_attempts):
+            label_row = []
+            for j in range(5):
+                label = Gtk.Label("")
+                self.grid.attach(label, j, i, 1, 1)
+                label_row.append(label)
+            self.feedback_labels.append(label_row)
 
-        # toolbar with the new toolbar redesign
-        toolbar_box = ToolbarBox()
+    def on_submit(self, widget):
+        """Handle the submit button click."""
+        guess = self.entry.get_text().upper()
+        if len(guess) == 5 and guess not in self.guesses:
+            self.guesses.append(guess)
+            self.check_guess(guess)
+            self.entry.set_text("")
 
-        activity_button = ActivityToolbarButton(self)
-        toolbar_box.toolbar.insert(activity_button, 0)
-        activity_button.show()
+    def check_guess(self, guess):
+        """Check the user's guess against the word to guess."""
+        # Logic to check the guess and update feedback labels
+        for i, letter in enumerate(guess):
+            if letter == self.word_to_guess[i]:
+                self.feedback_labels[len(self.guesses) - 1][i].set_text(letter)
+                self.feedback_labels[len(self.guesses) - 1][i].set_markup("<span foreground='green'>{}</span>".format(letter))
+            elif letter in self.word_to_guess:
+                self.feedback_labels[len(self.guesses) - 1][i].set_text(letter)
+                self.feedback_labels[len(self.guesses) - 1][i].set_markup("<span foreground='yellow'>{}</span>".format(letter))
+            else:
+                self.feedback_labels[len(self.guesses) - 1][i].set_text(letter)
+                self.feedback_labels[len(self.guesses) - 1][i].set_markup("<span foreground='red'>{}</span>".format(letter))
+        
+        if guess == self.word_to_guess:
+            self.show_winner_message()
 
-        separator = Gtk.SeparatorToolItem()
-        separator.props.draw = False
-        separator.set_expand(True)
-        toolbar_box.toolbar.insert(separator, -1)
-        separator.show()
-
-        stop_button = StopButton(self)
-        toolbar_box.toolbar.insert(stop_button, -1)
-        stop_button.show()
-
-        self.set_toolbar_box(toolbar_box)
-        toolbar_box.show()
-
-        # label with the text, make the string translatable
-        label = Gtk.Label(_("Hello Children!"))
-        self.set_canvas(label)
-        label.show()
+    def show_winner_message(self):
+        """Display a message when the user wins."""
+        dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Congratulations! You've guessed the word!")
+        dialog.run()
+        dialog.destroy()
