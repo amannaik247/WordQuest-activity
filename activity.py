@@ -147,6 +147,12 @@ class WordleActivity(activity.Activity):
                 else:
                     self.feedback_labels[row_index][i].set_text("")
 
+    def on_submit(self, widget):
+        """Handle the submit button click."""
+        if len(self.current_guess) == 5:
+            self.check_guess(self.current_guess)
+            self.current_guess = ""
+
     def check_guess(self, guess):
         """Check the user's guess against the word to guess."""
         row_index = len(self.guesses)
