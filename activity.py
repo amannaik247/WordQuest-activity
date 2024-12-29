@@ -28,8 +28,8 @@ from sugar3.activity.widgets import StopButton
 from sugar3.activity.widgets import ActivityToolbarButton
 
 
-class WordleActivity(activity.Activity):
-    """WordleActivity class for a Wordle-like game."""
+class HelloWorldActivity(activity.Activity):
+    """HelloWorldActivity class as specified in activity.info"""
 
     def __init__(self, handle):
         """Set up the HelloWorld activity."""
@@ -59,7 +59,7 @@ class WordleActivity(activity.Activity):
         self.set_toolbar_box(toolbar_box)
         toolbar_box.show()
 
-        def __init__(self, handle):
+    def __init__(self, handle):
         """Set up the Wordle activity."""
         activity.Activity.__init__(self, handle)
         
