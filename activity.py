@@ -70,6 +70,7 @@ class WordleActivity(activity.Activity):
         self.word_to_guess = random.choice(WORD_LIST)  # Randomly select a word
         self.guesses = []
         self.max_attempts = 6
+        self.current_guess = ""
 
         # Create the main VBox
         self.vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
@@ -79,6 +80,9 @@ class WordleActivity(activity.Activity):
 
         # Create UI components
         self.create_ui()
+
+        # Connect key press event
+        self.connect("key-press-event", self.on_key_press)
 
     def create_ui(self):
         """Create the user interface for the game."""
@@ -111,24 +115,42 @@ class WordleActivity(activity.Activity):
         # Show all widgets
         self.vbox.show_all()
 
-    def on_submit(self, widget):
-        """Handle the submit button click."""
-        guess = self.get_current_guess()
-        if len(guess) == 5 and guess not in self.guesses:
-            self.guesses.append(guess)
-            self.check_guess(guess)
-        else:
-            self.show_error_message("Please enter a valid 5-letter word.")
+    def on_key_press(self, widget, event):
+        """Handle key press events."""
+        keyval = Gdk.keysyms
+        if event.keyval in [keyval.A, keyval.B, keyval.C, keyval.D, keyval.E,
+                            keyval.F, keyval.G, keyval.H, keyval.I, keyval.J,
+                            keyval.K, keyval.L, keyval.M, keyval.N, keyval.O,
+                            keyval.P, keyval.Q, keyval.R, keyval.S, keyval.T,
+                            keyval.U, keyval.V, keyval.W, keyval.X, keyval.Y,
+                            keyval.Z]:
+            if len(self.current_guess) < 5:
+                self.current_guess += chr(event.keyval)
+                self.update_grid()
 
-    def get_current_guess(self):
-        """Get the current guess from the user."""
-        # This function can be modified to get input from a different source
-        # For now, we will simulate a guess for demonstration purposes
-        return self.guesses[-1] if self.guesses else "ABCDE"  # Example guess
+        elif event.keyval == keyval.BackSpace:
+            self.current_guess = self.current_guess[:-1]
+            self.update_grid()
+
+        elif event.keyval == keyval.Return:
+            if len(self.current_guess) == 5:
+                self.check_guess(self.current_guess)
+                self.current_guess = ""
+
+    def update_grid(self):
+        """Update the grid with the current guess."""
+        row_index = len(self.guesses)
+        if row_index < self.max_attempts:
+            for i in range(5):
+                if i < len(self.current_guess):
+                    self.feedback_labels[row_index][i].set_text(self.current_guess[i])
+                else:
+                    self.feedback_labels[row_index][i].set_text("")
 
     def check_guess(self, guess):
         """Check the user's guess against the word to guess."""
-        row_index = len(self.guesses) - 1
+        row_index = len(self.guesses)
+        self.guesses.append(guess)
         for i, letter in enumerate(guess):
             self.feedback_labels[row_index][i].set_text(letter)
             if letter == self.word_to_guess[i]:
@@ -157,10 +179,10 @@ class WordleActivity(activity.Activity):
         """Restart the game."""
         self.word_to_guess = random.choice(WORD_LIST)
         self.guesses = []
+        self.current_guess = ""
         for row in self.feedback_labels:
             for label in row:
                 label.set_text("")
-        self.entry.set_text("")
 
     def show_error_message(self, message):
         """Display an error message."""
