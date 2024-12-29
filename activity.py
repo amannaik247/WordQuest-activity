@@ -101,7 +101,6 @@ class WordleActivity(activity.Activity):
                 label.set_size_request(50, 50)  # Set size for feedback labels
                 label.set_halign(Gtk.Align.CENTER)
                 label.set_valign(Gtk.Align.CENTER)
-                label.set_name("feedback_label")  # Set a CSS class for styling
                 label.set_markup("<span font='20'>{}</span>".format(""))  # Set larger font
                 self.grid.attach(label, j, i, 1, 1)
                 label_row.append(label)
