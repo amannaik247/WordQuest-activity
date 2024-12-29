@@ -66,7 +66,7 @@ class WordleActivity(activity.Activity):
         self.set_title("Wordle Game")
         self.set_default_size(600, 400)  # Set default window size
 
-        # Initialize game variables
+         # Initialize game variables
         self.word_to_guess = random.choice(WORD_LIST)  # Randomly select a word
         self.guesses = []
         self.max_attempts = 6
@@ -97,7 +97,10 @@ class WordleActivity(activity.Activity):
                 label.set_size_request(50, 50)  # Set size for feedback labels
                 label.set_halign(Gtk.Align.CENTER)
                 label.set_valign(Gtk.Align.CENTER)
-                label.set_margin(5)
+                label.set_margin_top(5)
+                label.set_margin_bottom(5)
+                label.set_margin_start(5)
+                label.set_margin_end(5)
                 label.set_justify(Gtk.Justification.CENTER)
                 label.set_name("feedback_label")  # Set a CSS class for styling
                 self.grid.attach(label, j, i, 1, 1)
