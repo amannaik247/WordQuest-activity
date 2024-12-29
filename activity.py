@@ -59,7 +59,6 @@ class WordleActivity(activity.Activity):
         self.set_toolbar_box(toolbar_box)
         toolbar_box.show()
 
-    def __init__(self, handle):
         """Set up the Wordle activity."""
         activity.Activity.__init__(self, handle)
         
