@@ -32,6 +32,34 @@ class WordleActivity(activity.Activity):
     """WordleActivity class for a Wordle-like game."""
 
     def __init__(self, handle):
+        """Set up the HelloWorld activity."""
+        activity.Activity.__init__(self, handle)
+
+        # we do not have collaboration features
+        # make the share option insensitive
+        self.max_participants = 1
+
+        # toolbar with the new toolbar redesign
+        toolbar_box = ToolbarBox()
+
+        activity_button = ActivityToolbarButton(self)
+        toolbar_box.toolbar.insert(activity_button, 0)
+        activity_button.show()
+
+        separator = Gtk.SeparatorToolItem()
+        separator.props.draw = False
+        separator.set_expand(True)
+        toolbar_box.toolbar.insert(separator, -1)
+        separator.show()
+
+        stop_button = StopButton(self)
+        toolbar_box.toolbar.insert(stop_button, -1)
+        stop_button.show()
+
+        self.set_toolbar_box(toolbar_box)
+        toolbar_box.show()
+
+        def __init__(self, handle):
         """Set up the Wordle activity."""
         activity.Activity.__init__(self, handle)
         
