@@ -14,7 +14,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-"""HelloWorld Activity: A case study for developing an activity."""
+"""Wordle Activity: A case study for developing an activity."""
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -28,11 +28,11 @@ from sugar3.activity.widgets import StopButton
 from sugar3.activity.widgets import ActivityToolbarButton
 
 
-class HelloWorldActivity(activity.Activity):
-    """HelloWorldActivity class as specified in activity.info"""
+class WordleActivity(activity.Activity):
+    """WordleActivity class as specified in activity.info"""
 
     def __init__(self, handle):
-        """Set up the HelloWorld activity."""
+        """Set up the Wordle activity."""
         activity.Activity.__init__(self, handle)
 
         # we do not have collaboration features
