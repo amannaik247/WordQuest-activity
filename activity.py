@@ -59,8 +59,7 @@ class WordleActivity(activity.Activity):
         self.set_toolbar_box(toolbar_box)
         toolbar_box.show()
 
-        """Set up the Wordle activity."""
-        activity.Activity.__init__(self, handle)
+        
         
         # Initialize game variables
         self.word_to_guess = "APPLE"  # Example word
