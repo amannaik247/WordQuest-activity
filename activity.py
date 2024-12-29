@@ -60,6 +60,6 @@ class HelloWorldActivity(activity.Activity):
         toolbar_box.show()
 
         # label with the text, make the string translatable
-        label = Gtk.Label(_("Hello Aman!"))
+        label = Gtk.Label(_("Hello Children!"))
         self.set_canvas(label)
         label.show()
