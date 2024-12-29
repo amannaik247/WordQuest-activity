@@ -26,6 +26,8 @@ from sugar3.activity import activity
 from sugar3.graphics.toolbarbox import ToolbarBox
 from sugar3.activity.widgets import StopButton
 from sugar3.activity.widgets import ActivityToolbarButton
+import random
+from constants import WORD_LIST
 
 
 class WordleActivity(activity.Activity):
@@ -34,8 +36,6 @@ class WordleActivity(activity.Activity):
     def __init__(self, handle):
         """Set up the Wordle activity."""
         activity.Activity.__init__(self, handle)
-        
-        self.set_title("WordleGame")
 
         # we do not have collaboration features
         # make the share option insensitive
@@ -63,13 +63,18 @@ class WordleActivity(activity.Activity):
 
         
         
+        self.set_title("Wordle Game")
+        self.set_default_size(600, 400)  # Set default window size
+
         # Initialize game variables
-        self.word_to_guess = "APPLE"  # Example word
+        self.word_to_guess = random.choice(WORD_LIST)  # Randomly select a word
         self.guesses = []
         self.max_attempts = 6
 
         # Create the main VBox
-        self.vbox = Gtk.VBox(spacing=6)
+        self.vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        self.vbox.set_halign(Gtk.Align.CENTER)
+        self.vbox.set_valign(Gtk.Align.CENTER)
         self.set_canvas(self.vbox)
 
         # Create UI components
@@ -79,26 +84,35 @@ class WordleActivity(activity.Activity):
         """Create the user interface for the game."""
         # Create a grid for guesses
         self.grid = Gtk.Grid()
+        self.grid.set_row_spacing(10)
+        self.grid.set_column_spacing(10)
         self.vbox.pack_start(self.grid, True, True, 0)
 
-        # Create input field for guesses
-        self.entry = Gtk.Entry()
-        self.grid.attach(self.entry, 0, self.max_attempts, 5, 1)
-
-        # Create a submit button
-        submit_button = Gtk.Button(label="Submit")
-        submit_button.connect("clicked", self.on_submit)
-        self.grid.attach(submit_button, 5, self.max_attempts, 1, 1)
-
-        # Create labels for feedback
+        # Create labels for feedback (5 columns, 6 rows)
         self.feedback_labels = []
         for i in range(self.max_attempts):
             label_row = []
             for j in range(5):
                 label = Gtk.Label("")
+                label.set_size_request(50, 50)  # Set size for feedback labels
+                label.set_halign(Gtk.Align.CENTER)
+                label.set_valign(Gtk.Align.CENTER)
+                label.set_margin(5)
+                label.set_justify(Gtk.Justification.CENTER)
+                label.set_name("feedback_label")  # Set a CSS class for styling
                 self.grid.attach(label, j, i, 1, 1)
                 label_row.append(label)
             self.feedback_labels.append(label_row)
+
+        # Create input field for guesses
+        self.entry = Gtk.Entry()
+        self.entry.set_max_length(5)  # Limit input to 5 characters
+        self.vbox.pack_start(self.entry, False, False, 0)
+
+        # Create a submit button
+        submit_button = Gtk.Button(label="Submit")
+        submit_button.connect("clicked", self.on_submit)
+        self.vbox.pack_start(submit_button, False, False, 0)
 
         # Show all widgets
         self.vbox.show_all()
@@ -110,25 +124,45 @@ class WordleActivity(activity.Activity):
             self.guesses.append(guess)
             self.check_guess(guess)
             self.entry.set_text("")
+        else:
+            self.show_error_message("Please enter a valid 5-letter word.")
 
     def check_guess(self, guess):
         """Check the user's guess against the word to guess."""
+        row_index = len(self.guesses) - 1
         for i, letter in enumerate(guess):
+            self.feedback_labels[row_index][i].set_text(letter)
             if letter == self.word_to_guess[i]:
-                self.feedback_labels[len(self.guesses) - 1][i].set_text(letter)
-                self.feedback_labels[len(self.guesses) - 1][i].set_markup("<span foreground='green'>{}</span>".format(letter))
+                self.feedback_labels[row_index][i].set_markup("<span foreground='green'>{}</span>".format(letter))
             elif letter in self.word_to_guess:
-                self.feedback_labels[len(self.guesses) - 1][i].set_text(letter)
-                self.feedback_labels[len(self.guesses) - 1][i].set_markup("<span foreground='yellow'>{}</span>".format(letter))
+                self.feedback_labels[row_index][i].set_markup("<span foreground='yellow'>{}</span>".format(letter))
             else:
-                self.feedback_labels[len(self.guesses) - 1][i].set_text(letter)
-                self.feedback_labels[len(self.guesses) - 1][i].set_markup("<span foreground='red'>{}</span>".format(letter))
+                self.feedback_labels[row_index][i].set_markup("<span foreground='red'>{}</span>".format(letter))
 
-        if guess == self.word_to_guess:
-            self.show_winner_message()
+        if guess == self.word_to_guess or len(self.guesses) >= self.max_attempts:
+            self.show_end_message()
 
-    def show_winner_message(self):
-        """Display a message when the user wins."""
-        dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Congratulations! You've guessed the word!")
+    def show_end_message(self):
+        """Display a message when the game ends."""
+        dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.YES_NO,
+                                   "Game Over! The word was: {}\nDo you want to restart?".format(self.word_to_guess))
+        response = dialog.run()
+        dialog.destroy()
+
+        if response == Gtk.ResponseType.YES:
+            self.restart_game()
+
+    def restart_game(self):
+        """Restart the game."""
+        self.word_to_guess = random.choice(WORD_LIST)
+        self.guesses = []
+        for row in self.feedback_labels:
+            for label in row:
+                label.set_text("")
+        self.entry.set_text("")
+
+    def show_error_message(self, message):
+        """Display an error message."""
+        dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, message)
         dialog.run()
         dialog.destroy()
