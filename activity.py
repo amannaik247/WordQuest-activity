@@ -34,6 +34,8 @@ class WordleActivity(activity.Activity):
     def __init__(self, handle):
         """Set up the Wordle activity."""
         activity.Activity.__init__(self, handle)
+        
+        self.set_title("WordleGame")
 
         # we do not have collaboration features
         # make the share option insensitive
@@ -97,6 +99,9 @@ class WordleActivity(activity.Activity):
                 self.grid.attach(label, j, i, 1, 1)
                 label_row.append(label)
             self.feedback_labels.append(label_row)
+
+        # Show all widgets
+        self.vbox.show_all()
 
     def on_submit(self, widget):
         """Handle the submit button click."""
