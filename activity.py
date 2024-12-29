@@ -66,7 +66,7 @@ class WordleActivity(activity.Activity):
         self.set_title("Wordle Game")
         self.set_default_size(600, 400)  # Set default window size
 
-         # Initialize game variables
+        # Initialize game variables
         self.word_to_guess = random.choice(WORD_LIST)  # Randomly select a word
         self.guesses = []
         self.max_attempts = 6
@@ -97,20 +97,11 @@ class WordleActivity(activity.Activity):
                 label.set_size_request(50, 50)  # Set size for feedback labels
                 label.set_halign(Gtk.Align.CENTER)
                 label.set_valign(Gtk.Align.CENTER)
-                label.set_margin_top(5)
-                label.set_margin_bottom(5)
-                label.set_margin_start(5)
-                label.set_margin_end(5)
-                label.set_justify(Gtk.Justification.CENTER)
                 label.set_name("feedback_label")  # Set a CSS class for styling
+                label.set_markup("<span font='20'>{}</span>".format(""))  # Set larger font
                 self.grid.attach(label, j, i, 1, 1)
                 label_row.append(label)
             self.feedback_labels.append(label_row)
-
-        # Create input field for guesses
-        self.entry = Gtk.Entry()
-        self.entry.set_max_length(5)  # Limit input to 5 characters
-        self.vbox.pack_start(self.entry, False, False, 0)
 
         # Create a submit button
         submit_button = Gtk.Button(label="Submit")
@@ -122,13 +113,18 @@ class WordleActivity(activity.Activity):
 
     def on_submit(self, widget):
         """Handle the submit button click."""
-        guess = self.entry.get_text().upper()
+        guess = self.get_current_guess()
         if len(guess) == 5 and guess not in self.guesses:
             self.guesses.append(guess)
             self.check_guess(guess)
-            self.entry.set_text("")
         else:
             self.show_error_message("Please enter a valid 5-letter word.")
+
+    def get_current_guess(self):
+        """Get the current guess from the user."""
+        # This function can be modified to get input from a different source
+        # For now, we will simulate a guess for demonstration purposes
+        return self.guesses[-1] if self.guesses else "ABCDE"  # Example guess
 
     def check_guess(self, guess):
         """Check the user's guess against the word to guess."""
@@ -136,19 +132,21 @@ class WordleActivity(activity.Activity):
         for i, letter in enumerate(guess):
             self.feedback_labels[row_index][i].set_text(letter)
             if letter == self.word_to_guess[i]:
-                self.feedback_labels[row_index][i].set_markup("<span foreground='green'>{}</span>".format(letter))
+                self.feedback_labels[row_index][i].set_markup("<span foreground='green' font='20'>{}</span>".format(letter))
             elif letter in self.word_to_guess:
-                self.feedback_labels[row_index][i].set_markup("<span foreground='yellow'>{}</span>".format(letter))
+                self.feedback_labels[row_index][i].set_markup("<span foreground='yellow' font='20'>{}</span>".format(letter))
             else:
-                self.feedback_labels[row_index][i].set_markup("<span foreground='red'>{}</span>".format(letter))
+                self.feedback_labels[row_index][i].set_markup("<span foreground='red' font='20'>{}</span>".format(letter))
 
-        if guess == self.word_to_guess or len(self.guesses) >= self.max_attempts:
-            self.show_end_message()
+        if guess == self.word_to_guess:
+            self.show_end_message("Congratulations! You've guessed the word!", True)
+        elif len(self.guesses) >= self.max_attempts:
+            self.show_end_message("Nice try! The word was: {}\n".format(self.word_to_guess), False)
 
-    def show_end_message(self):
+    def show_end_message(self, message, won):
         """Display a message when the game ends."""
         dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.YES_NO,
-                                   "Game Over! The word was: {}\nDo you want to restart?".format(self.word_to_guess))
+                                   "{}\nDo you want to restart?".format(message))
         response = dialog.run()
         dialog.destroy()
 
