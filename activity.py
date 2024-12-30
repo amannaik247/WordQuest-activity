@@ -76,13 +76,9 @@ class WordleActivity(activity.Activity):
 
     def create_ui(self):
         """Create the user interface for the game."""
-        # Create a horizontal box to hold the grid
-        container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        self.vbox.pack_start(container, True, True, 0)
-
         # Create a grid for guesses
         self.grid = Gtk.Grid()
-        container.pack_start(self.grid, True, True, 0)
+        self.vbox.pack_start(self.grid, True, True, 0)
 
         # Create input field for guesses
         self.entry = Gtk.Entry()
@@ -97,31 +93,26 @@ class WordleActivity(activity.Activity):
         # Create a CSS provider for styling
         css_provider = Gtk.CssProvider()
         css_provider.load_from_data(b"""
-        .feedback-label {
-            background-color: lightgray;
-            border: 1px solid black;
-            padding: 10px;
-            font-size: 24px;
-            min-width: 60px;
-            min-height: 60px;
-        }
-        .feedback-label {
-            -Gtk-align: center;  /* Center align the label */
-        }
-    """)
+            label {
+                background-color: lightgray;
+                border: 1px solid black;
+                padding: 10px;
+                font-size: 24px;
+                text-align: center;
+            }
+        """)
 
         # Create labels for feedback
         self.feedback_labels = []
         for i in range(self.max_attempts):
             label_row = []
             for j in range(5):
-                event_box = Gtk.EventBox()  # Create an event box for each label
                 label = Gtk.Label("")
+                label.set_size_request(60, 60)  # Set size for feedback labels
                 label.set_halign(Gtk.Align.CENTER)
                 label.set_valign(Gtk.Align.CENTER)
                 label.get_style_context().add_class("feedback-label")  # Add a class for styling
-                event_box.add(label)  # Add label to the event box
-                self.grid.attach(event_box, j, i, 1, 1)  # Attach event box to grid
+                self.grid.attach(label, j, i, 1, 1)  # Attach label to grid
                 label_row.append(label)
             self.feedback_labels.append(label_row)
 
@@ -130,11 +121,6 @@ class WordleActivity(activity.Activity):
 
         # Show all widgets
         self.vbox.show_all()  # Ensure the vbox and its contents are visible
-
-        # Initialize the grid with empty boxes
-        for i in range(self.max_attempts):
-            for j in range(5):
-                self.feedback_labels[i][j].set_text("")  # Ensure all boxes are empty initially
 
     def on_submit(self, widget):
         """Handle the submit button click."""
