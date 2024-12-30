@@ -3,3 +3,6 @@
 *.pyo
 dist/
 locale/
+.gitignore
+example.py
+sugar-toolkit-gtk3

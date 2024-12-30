@@ -90,23 +90,37 @@ class WordleActivity(activity.Activity):
         submit_button.connect("clicked", self.on_submit)
         self.grid.attach(submit_button, 5, self.max_attempts, 1, 1)
 
+        # Create a CSS provider for styling
+        css_provider = Gtk.CssProvider()
+        css_provider.load_from_data(b"""
+            .feedback-label {
+                background-color: lightgray;
+                border: 1px solid black;
+                padding: 10px;
+                font-size: 24px;
+                text-align: center;
+                min-width: 60px;
+                min-height: 60px;
+            }
+        """)
+
         # Create labels for feedback
         self.feedback_labels = []
         for i in range(self.max_attempts):
             label_row = []
             for j in range(5):
+                event_box = Gtk.EventBox()  # Create an event box for each label
                 label = Gtk.Label("")
-                label.set_size_request(60, 60)  # Set size for feedback labels
                 label.set_halign(Gtk.Align.CENTER)
                 label.set_valign(Gtk.Align.CENTER)
-                label.set_markup("<span font='24'>{}</span>".format(""))  # Set larger font
-                
-                # Set a background color and border for the label to make it visible
-                label.set_style("background-color: lightgray; border: 1px solid black;")
-                
-                self.grid.attach(label, j, i, 1, 1)  # Attach label to grid
+                label.get_style_context().add_class("feedback-label")  # Add a class for styling
+                event_box.add(label)  # Add label to the event box
+                self.grid.attach(event_box, j, i, 1, 1)  # Attach event box to grid
                 label_row.append(label)
             self.feedback_labels.append(label_row)
+
+        # Apply the CSS styles to the grid
+        self.grid.get_style_context().add_provider(css_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
 
         # Show all widgets
         self.vbox.show_all()  # Ensure the vbox and its contents are visible
@@ -115,7 +129,6 @@ class WordleActivity(activity.Activity):
         for i in range(self.max_attempts):
             for j in range(5):
                 self.feedback_labels[i][j].set_text("")  # Ensure all boxes are empty initially
-                self.feedback_labels[i][j].set_markup("<span font='24'>{}</span>".format(""))  # Set larger font
 
     def on_submit(self, widget):
         """Handle the submit button click."""
