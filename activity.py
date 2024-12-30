@@ -96,9 +96,10 @@ class WordleActivity(activity.Activity):
             label_row = []
             for j in range(5):
                 label = Gtk.Label("")
-                label.set_size_request(40, 40)  # Set size for feedback labels
+                label.set_size_request(60, 60)  # Set size for feedback labels
                 label.set_halign(Gtk.Align.CENTER)
                 label.set_valign(Gtk.Align.CENTER)
+                label.set_markup("<span font='20'>{}</span>".format(""))  # Set larger font
                 self.grid.attach(label, j, i, 1, 1)
                 label_row.append(label)
             self.feedback_labels.append(label_row)
@@ -129,8 +130,11 @@ class WordleActivity(activity.Activity):
                 self.feedback_labels[len(self.guesses) - 1][i].set_text(letter)
                 self.feedback_labels[len(self.guesses) - 1][i].set_markup("<span foreground='red'>{}</span>".format(letter))
 
-        if guess == self.word_to_guess or len(self.guesses) >= self.max_attempts:
-            self.show_end_message()
+        # Check for win or loss
+        if guess == self.word_to_guess:
+            self.show_congratulations_message()  # Show congratulations message
+        elif len(self.guesses) >= self.max_attempts:
+            self.show_end_message()  # Show game over message
 
     def show_end_message(self):
         """Display a message when the game ends."""
@@ -156,3 +160,11 @@ class WordleActivity(activity.Activity):
         dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, message)
         dialog.run()
         dialog.destroy()
+
+    def show_congratulations_message(self):
+        """Display a congratulations message when the user wins."""
+        dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
+                                   "Congratulations! You've guessed the word: {}".format(self.word_to_guess))
+        dialog.run()
+        dialog.destroy()
+        self.restart_game()  # Optionally restart the game after winning
