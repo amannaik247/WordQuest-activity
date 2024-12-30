@@ -99,13 +99,13 @@ class WordleActivity(activity.Activity):
                 label.set_size_request(60, 60)  # Set size for feedback labels
                 label.set_halign(Gtk.Align.CENTER)
                 label.set_valign(Gtk.Align.CENTER)
-                label.set_markup("<span font='20'>{}</span>".format(""))  # Set larger font
-                self.grid.attach(label, j, i, 1, 1)
+                label.set_markup("<span font='24'>{}</span>".format(""))  # Set larger font
+                self.grid.attach(label, j, i, 1, 1)  # Attach label to grid
                 label_row.append(label)
             self.feedback_labels.append(label_row)
 
         # Show all widgets
-        self.vbox.show_all()
+        self.vbox.show_all()  # Ensure the vbox and its contents are visible
 
     def on_submit(self, widget):
         """Handle the submit button click."""
