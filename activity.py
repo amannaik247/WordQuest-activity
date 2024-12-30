@@ -76,9 +76,13 @@ class WordleActivity(activity.Activity):
 
     def create_ui(self):
         """Create the user interface for the game."""
+        # Create a horizontal box to hold the grid
+        container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.vbox.pack_start(container, True, True, 0)
+
         # Create a grid for guesses
         self.grid = Gtk.Grid()
-        self.vbox.pack_start(self.grid, True, True, 0)
+        container.pack_start(self.grid, True, True, 0)
 
         # Create input field for guesses
         self.entry = Gtk.Entry()
