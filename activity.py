@@ -35,15 +35,11 @@ class WordleActivity(activity.Activity):
 
     def __init__(self, handle):
         """Set up the Wordle activity."""
-        activity.Activity.__init__(self, handle)
+        super().__init__(handle)
 
-        # we do not have collaboration features
-        # make the share option insensitive
+        # Set up the toolbar
         self.max_participants = 1
-
-        # toolbar with the new toolbar redesign
         toolbar_box = ToolbarBox()
-
         activity_button = ActivityToolbarButton(self)
         toolbar_box.toolbar.insert(activity_button, 0)
         activity_button.show()
@@ -61,13 +57,11 @@ class WordleActivity(activity.Activity):
         self.set_toolbar_box(toolbar_box)
         toolbar_box.show()
 
-        
-        
         self.set_title("Wordle Game")
-        self.set_default_size(600, 400)  # Set default window size
+        self.set_default_size(600, 400)
 
         # Initialize game variables
-        self.word_to_guess = random.choice(WORD_LIST)  # Randomly select a word
+        self.word_to_guess = random.choice(WORD_LIST)
         self.guesses = []
         self.max_attempts = 6
         self.current_guess = ""
@@ -105,9 +99,6 @@ class WordleActivity(activity.Activity):
                 self.grid.attach(label, j, i, 1, 1)
                 label_row.append(label)
             self.feedback_labels.append(label_row)
-
-        # Show all widgets in the grid first
-        self.grid.show_all()
 
         # Create a submit button
         submit_button = Gtk.Button(label="Submit")
