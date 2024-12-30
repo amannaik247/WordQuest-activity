@@ -100,12 +100,22 @@ class WordleActivity(activity.Activity):
                 label.set_halign(Gtk.Align.CENTER)
                 label.set_valign(Gtk.Align.CENTER)
                 label.set_markup("<span font='24'>{}</span>".format(""))  # Set larger font
+                
+                # Set a background color and border for the label to make it visible
+                label.set_style("background-color: lightgray; border: 1px solid black;")
+                
                 self.grid.attach(label, j, i, 1, 1)  # Attach label to grid
                 label_row.append(label)
             self.feedback_labels.append(label_row)
 
         # Show all widgets
         self.vbox.show_all()  # Ensure the vbox and its contents are visible
+
+        # Initialize the grid with empty boxes
+        for i in range(self.max_attempts):
+            for j in range(5):
+                self.feedback_labels[i][j].set_text("")  # Ensure all boxes are empty initially
+                self.feedback_labels[i][j].set_markup("<span font='24'>{}</span>".format(""))  # Set larger font
 
     def on_submit(self, widget):
         """Handle the submit button click."""
