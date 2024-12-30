@@ -58,13 +58,12 @@ class WordleActivity(activity.Activity):
         toolbar_box.show()
 
         self.set_title("Wordle Game")
-        self.set_default_size(600, 400)
+        self.set_default_size(600, 400)  # Set default window size
 
         # Initialize game variables
-        self.word_to_guess = random.choice(WORD_LIST)
+        self.word_to_guess = random.choice(WORD_LIST)  # Randomly select a word
         self.guesses = []
         self.max_attempts = 6
-        self.current_guess = ""
 
         # Create the main VBox
         self.vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
@@ -75,99 +74,68 @@ class WordleActivity(activity.Activity):
         # Create UI components
         self.create_ui()
 
-        # Connect key press event
-        self.connect("key-press-event", self.on_key_press)
-
     def create_ui(self):
         """Create the user interface for the game."""
         # Create a grid for guesses
         self.grid = Gtk.Grid()
-        self.grid.set_row_spacing(10)
-        self.grid.set_column_spacing(10)
         self.vbox.pack_start(self.grid, True, True, 0)
 
-        # Create labels for feedback (5 columns, 6 rows)
+        # Create input field for guesses
+        self.entry = Gtk.Entry()
+        self.entry.set_max_length(5)  # Limit input to 5 characters
+        self.grid.attach(self.entry, 0, self.max_attempts, 5, 1)
+
+        # Create a submit button
+        submit_button = Gtk.Button(label="Submit")
+        submit_button.connect("clicked", self.on_submit)
+        self.grid.attach(submit_button, 5, self.max_attempts, 1, 1)
+
+        # Create labels for feedback
         self.feedback_labels = []
         for i in range(self.max_attempts):
             label_row = []
             for j in range(5):
                 label = Gtk.Label("")
-                label.set_size_request(50, 50)  # Set size for feedback labels
+                label.set_size_request(40, 40)  # Set size for feedback labels
                 label.set_halign(Gtk.Align.CENTER)
                 label.set_valign(Gtk.Align.CENTER)
-                label.set_markup("<span font='20'>{}</span>".format(""))  # Set larger font
                 self.grid.attach(label, j, i, 1, 1)
                 label_row.append(label)
             self.feedback_labels.append(label_row)
 
-        # Create a submit button
-        submit_button = Gtk.Button(label="Submit")
-        submit_button.connect("clicked", self.on_submit)
-        self.vbox.pack_start(submit_button, False, False, 0)
-
-        # Show all widgets in the vbox
+        # Show all widgets
         self.vbox.show_all()
-
-    def on_key_press(self, widget, event):
-        """Handle key press events."""
-        keyval = Gdk.keysyms
-        if event.keyval in [keyval.A, keyval.B, keyval.C, keyval.D, keyval.E,
-                            keyval.F, keyval.G, keyval.H, keyval.I, keyval.J,
-                            keyval.K, keyval.L, keyval.M, keyval.N, keyval.O,
-                            keyval.P, keyval.Q, keyval.R, keyval.S, keyval.T,
-                            keyval.U, keyval.V, keyval.W, keyval.X, keyval.Y,
-                            keyval.Z]:
-            if len(self.current_guess) < 5:
-                self.current_guess += chr(event.keyval)
-                self.update_grid()
-
-        elif event.keyval == keyval.BackSpace:
-            self.current_guess = self.current_guess[:-1]
-            self.update_grid()
-
-        elif event.keyval == keyval.Return:
-            if len(self.current_guess) == 5:
-                self.check_guess(self.current_guess)
-                self.current_guess = ""
-
-    def update_grid(self):
-        """Update the grid with the current guess."""
-        row_index = len(self.guesses)
-        if row_index < self.max_attempts:
-            for i in range(5):
-                if i < len(self.current_guess):
-                    self.feedback_labels[row_index][i].set_text(self.current_guess[i])
-                else:
-                    self.feedback_labels[row_index][i].set_text("")
 
     def on_submit(self, widget):
         """Handle the submit button click."""
-        if len(self.current_guess) == 5:
-            self.check_guess(self.current_guess)
-            self.current_guess = ""
+        guess = self.entry.get_text().upper()
+        if len(guess) == 5 and guess not in self.guesses:
+            self.guesses.append(guess)
+            self.check_guess(guess)
+            self.entry.set_text("")
+        else:
+            self.show_error_message("Please enter a valid 5-letter word.")
 
     def check_guess(self, guess):
         """Check the user's guess against the word to guess."""
-        row_index = len(self.guesses)
-        self.guesses.append(guess)
         for i, letter in enumerate(guess):
-            self.feedback_labels[row_index][i].set_text(letter)
             if letter == self.word_to_guess[i]:
-                self.feedback_labels[row_index][i].set_markup("<span foreground='green' font='20'>{}</span>".format(letter))
+                self.feedback_labels[len(self.guesses) - 1][i].set_text(letter)
+                self.feedback_labels[len(self.guesses) - 1][i].set_markup("<span foreground='green'>{}</span>".format(letter))
             elif letter in self.word_to_guess:
-                self.feedback_labels[row_index][i].set_markup("<span foreground='yellow' font='20'>{}</span>".format(letter))
+                self.feedback_labels[len(self.guesses) - 1][i].set_text(letter)
+                self.feedback_labels[len(self.guesses) - 1][i].set_markup("<span foreground='yellow'>{}</span>".format(letter))
             else:
-                self.feedback_labels[row_index][i].set_markup("<span foreground='red' font='20'>{}</span>".format(letter))
+                self.feedback_labels[len(self.guesses) - 1][i].set_text(letter)
+                self.feedback_labels[len(self.guesses) - 1][i].set_markup("<span foreground='red'>{}</span>".format(letter))
 
-        if guess == self.word_to_guess:
-            self.show_end_message("Congratulations! You've guessed the word!", True)
-        elif len(self.guesses) >= self.max_attempts:
-            self.show_end_message("Nice try! The word was: {}\n".format(self.word_to_guess), False)
+        if guess == self.word_to_guess or len(self.guesses) >= self.max_attempts:
+            self.show_end_message()
 
-    def show_end_message(self, message, won):
+    def show_end_message(self):
         """Display a message when the game ends."""
         dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.YES_NO,
-                                   "{}\nDo you want to restart?".format(message))
+                                   "Game Over! The word was: {}\nDo you want to restart?".format(self.word_to_guess))
         response = dialog.run()
         dialog.destroy()
 
@@ -178,10 +146,10 @@ class WordleActivity(activity.Activity):
         """Restart the game."""
         self.word_to_guess = random.choice(WORD_LIST)
         self.guesses = []
-        self.current_guess = ""
         for row in self.feedback_labels:
             for label in row:
                 label.set_text("")
+        self.entry.set_text("")
 
     def show_error_message(self, message):
         """Display an error message."""
