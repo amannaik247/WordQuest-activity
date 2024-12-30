@@ -93,16 +93,18 @@ class WordleActivity(activity.Activity):
         # Create a CSS provider for styling
         css_provider = Gtk.CssProvider()
         css_provider.load_from_data(b"""
-            .feedback-label {
-                background-color: lightgray;
-                border: 1px solid black;
-                padding: 10px;
-                font-size: 24px;
-                text-align: center;
-                min-width: 60px;
-                min-height: 60px;
-            }
-        """)
+        .feedback-label {
+            background-color: lightgray;
+            border: 1px solid black;
+            padding: 10px;
+            font-size: 24px;
+            min-width: 60px;
+            min-height: 60px;
+        }
+        .feedback-label {
+            -Gtk-align: center;  /* Center align the label */
+        }
+    """)
 
         # Create labels for feedback
         self.feedback_labels = []
