@@ -106,12 +106,15 @@ class WordleActivity(activity.Activity):
                 label_row.append(label)
             self.feedback_labels.append(label_row)
 
+        # Show all widgets in the grid first
+        self.grid.show_all()
+
         # Create a submit button
         submit_button = Gtk.Button(label="Submit")
         submit_button.connect("clicked", self.on_submit)
         self.vbox.pack_start(submit_button, False, False, 0)
 
-        # Show all widgets
+        # Show all widgets in the vbox
         self.vbox.show_all()
 
     def on_key_press(self, widget, event):
