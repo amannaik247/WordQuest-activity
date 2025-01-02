@@ -19,9 +19,17 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from sprites import Sprites, Sprite  # Import Sprites and Sprite classes
-import random
+
 from gettext import gettext as _
+
+from sugar3.activity import activity
+from sugar3.graphics.toolbarbox import ToolbarBox
+from sugar3.activity.widgets import StopButton
+from sugar3.activity.widgets import ActivityToolbarButton
+import random
+from sprites import Sprites, Sprite 
+from constants import WORD_LIST
+
 
 class WordleActivity(activity.Activity):
     """WordleActivity class as specified in activity.info"""
@@ -136,7 +144,7 @@ class WordleActivity(activity.Activity):
 
     def show_error_message(self, message):
         """Display an error message."""
-        dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR)
+        dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, message)
         dialog.run()
         dialog.destroy()
 
