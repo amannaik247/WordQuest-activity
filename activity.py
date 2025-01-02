@@ -19,16 +19,9 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-
-from gettext import gettext as _
-
-from sugar3.activity import activity
-from sugar3.graphics.toolbarbox import ToolbarBox
-from sugar3.activity.widgets import StopButton
-from sugar3.activity.widgets import ActivityToolbarButton
+from sprites import Sprites, Sprite  # Import Sprites and Sprite classes
 import random
-from constants import WORD_LIST
-
+from gettext import gettext as _
 
 class WordleActivity(activity.Activity):
     """WordleActivity class as specified in activity.info"""
@@ -71,67 +64,34 @@ class WordleActivity(activity.Activity):
         self.vbox.set_valign(Gtk.Align.CENTER)
         self.set_canvas(self.vbox)
 
+        # Create the sprite collection
+        self.sprite_list = Sprites(self.vbox)  # Pass the main vbox to Sprites
+
         # Create UI components
         self.create_ui()
 
     def create_ui(self):
         """Create the user interface for the game."""
-        # Create a vertical box to hold the grid
-        container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        self.vbox.pack_start(container, True, True, 0)
-
-        # Create a grid for guesses
-        self.grid = Gtk.Grid()
-        container.pack_start(self.grid, True, True, 0)
-
         # Create input field for guesses
         self.entry = Gtk.Entry()
         self.entry.set_max_length(5)  # Limit input to 5 characters
-        self.grid.attach(self.entry, 0, self.max_attempts, 5, 1)
+        self.vbox.pack_start(self.entry, True, True, 0)
 
         # Create a submit button
         submit_button = Gtk.Button(label="Submit")
         submit_button.connect("clicked", self.on_submit)
-        self.grid.attach(submit_button, 5, self.max_attempts, 1, 1)
+        self.vbox.pack_start(submit_button, True, True, 0)
 
-        # Create a CSS provider for styling
-        css_provider = Gtk.CssProvider()
-        css_provider.load_from_data(b"""
-            .feedback-label {
-                background-color: lightgray;
-                border: 1px solid black;
-                padding: 10px;
-                font-size: 24px;
-                min-width: 60px;
-                min-height: 60px;
-            }
-        """)
-
-        # Create labels for feedback
-        self.feedback_labels = []
+        # Initialize the graphical boxes for feedback
+        self.sprites = []
         for i in range(self.max_attempts):
-            label_row = []
             for j in range(5):
-                event_box = Gtk.EventBox()  # Create an event box for each label
-                label = Gtk.Label("")
-                label.set_halign(Gtk.Align.CENTER)
-                label.set_valign(Gtk.Align.CENTER)
-                label.get_style_context().add_class("feedback-label")  # Add a class for styling
-                event_box.add(label)  # Add label to the event box
-                self.grid.attach(event_box, j, i, 1, 1)  # Attach event box to grid
-                label_row.append(label)
-            self.feedback_labels.append(label_row)
-
-        # Apply the CSS styles to the grid
-        self.grid.get_style_context().add_provider(css_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
+                # Create a sprite for each box
+                sprite = Sprite(self.sprite_list, j * 60, i * 60, None)  # Adjust position as needed
+                self.sprites.append(sprite)
 
         # Show all widgets
         self.vbox.show_all()  # Ensure the vbox and its contents are visible
-
-        # Initialize the grid with empty boxes
-        for i in range(self.max_attempts):
-            for j in range(5):
-                self.feedback_labels[i][j].set_text("")  # Ensure all boxes are empty initially
 
     def on_submit(self, widget):
         """Handle the submit button click."""
@@ -146,15 +106,9 @@ class WordleActivity(activity.Activity):
     def check_guess(self, guess):
         """Check the user's guess against the word to guess."""
         for i, letter in enumerate(guess):
-            if letter == self.word_to_guess[i]:
-                self.feedback_labels[len(self.guesses) - 1][i].set_text(letter)
-                self.feedback_labels[len(self.guesses) - 1][i].set_markup("<span foreground='green'>{}</span>".format(letter))
-            elif letter in self.word_to_guess:
-                self.feedback_labels[len(self.guesses) - 1][i].set_text(letter)
-                self.feedback_labels[len(self.guesses) - 1][i].set_markup("<span foreground='yellow'>{}</span>".format(letter))
-            else:
-                self.feedback_labels[len(self.guesses) - 1][i].set_text(letter)
-                self.feedback_labels[len(self.guesses) - 1][i].set_markup("<span foreground='red'>{}</span>".format(letter))
+            # Update the corresponding sprite with the guessed letter
+            sprite = self.sprites[len(self.guesses) - 1 * 5 + i]
+            sprite.set_label(letter)  # Set the label for the sprite
 
         # Check for win or loss
         if guess == self.word_to_guess:
@@ -176,14 +130,13 @@ class WordleActivity(activity.Activity):
         """Restart the game."""
         self.word_to_guess = random.choice(WORD_LIST)
         self.guesses = []
-        for row in self.feedback_labels:
-            for label in row:
-                label.set_text("")
+        for sprite in self.sprites:
+            sprite.set_label("")  # Clear the labels on the sprites
         self.entry.set_text("")
 
     def show_error_message(self, message):
         """Display an error message."""
-        dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, message)
+        dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR)
         dialog.run()
         dialog.destroy()
 
