@@ -18,7 +18,7 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk,GdkPixbuf, GLib
 
 from gettext import gettext as _
 
@@ -66,6 +66,7 @@ class WordleActivity(activity.Activity):
         self.guesses = []
         self.max_attempts = 6
 
+        
         # Create the main VBox
         self.vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
         self.vbox.set_halign(Gtk.Align.CENTER)
@@ -74,6 +75,11 @@ class WordleActivity(activity.Activity):
 
         # Create the sprite collection
         self.sprite_list = Sprites(self.vbox)  # Pass the main vbox to Sprites
+        
+        #Using sugarchess related code
+        self._width = Gdk.Screen.width()
+        self._height = Gdk.Screen.height()
+        self.scale = int((self._height - 55) / 10)
 
         # Create UI components
         self.create_ui()
