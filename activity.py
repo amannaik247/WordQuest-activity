@@ -101,7 +101,8 @@ class WordleActivity(activity.Activity):
         for i in range(self.max_attempts):
             for j in range(5):
                 # Create a sprite for each box
-                sprite = Sprite(self.sprite_list, j * 60, i * 60, None)  # Adjust position as needed
+                sprite_image = None  # Replace with actual image if available
+                sprite = Sprite(self.sprite_list, j * 60, i * 60, sprite_image)  # Adjust position as needed
                 self.sprites.append(sprite)
 
         # Show all widgets
