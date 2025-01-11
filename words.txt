@@ -1,1 +1,9 @@
-"APPLE", "BANANA", "CHERRY", "GRAPE", "LEMON"
+apple
+grape
+peach
+berry
+melon
+mango
+lemon
+plumb
+guava
