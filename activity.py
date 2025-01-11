@@ -87,25 +87,22 @@ class WordleActivity(activity.Activity):
         self.close()
 
     def new_game(self, widget=None):
-    """Start a new game."""
-    self.target_word = random.choice(self.word_list)
-    self.current_row = 0
-    self.max_guesses = 6
-    self.guess_grid.foreach(lambda widget: self.guess_grid.remove(widget))
-    self.status_label.set_text("")
-    self.input_entry.set_text("")
-    self.input_entry.set_sensitive(True)
-    self.submit_button.set_sensitive(True)
+        """Start a new game."""
+        self.target_word = random.choice(self.word_list)
+        self.current_row = 0
+        self.max_guesses = 6
+        self.guess_grid.foreach(lambda widget: self.guess_grid.remove(widget))
+        self.status_label.set_text("")
+        self.input_entry.set_text("")
+        self.input_entry.set_sensitive(True)
+        self.submit_button.set_sensitive(True)
 
-    for row in range(self.max_guesses):
-        for col in range(5):
-            label = Gtk.Label(label="")
-            label.set_name("cell")
-            label.set_xalign(0.5)  # Horizontal center alignment
-            label.set_yalign(0.5)  # Vertical center alignment
-            self.guess_grid.attach(label, col, row, 1, 1)
-    self.guess_grid.show_all()
-
+        for row in range(self.max_guesses):
+            for col in range(5):
+                label = Gtk.Label(label="")
+                label.set_name("cell")
+                self.guess_grid.attach(label, col, row, 1, 1)
+        self.guess_grid.show_all()
 
     def on_submit_guess(self, widget):
         """Handle guess submission."""
