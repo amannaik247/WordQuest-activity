@@ -21,6 +21,10 @@ class WordleActivity(activity.Activity):
         self.attempts = 6
         self.current_attempt = 0
 
+        # Main game layout using Gtk.Grid
+        self.grid = Gtk.Grid()
+        self.add(self.grid)
+
         # Set up the toolbar
         toolbar_box = ToolbarBox()
         activity_button = ActivityToolbarButton(self)
@@ -40,21 +44,21 @@ class WordleActivity(activity.Activity):
         self.set_toolbar_box(toolbar_box)
         toolbar_box.show()
 
-        # Main game layout
-        self.grid = Gtk.Grid()
-        self.add(self.grid)
-
+        # Entry for user input
         self.entry = Gtk.Entry()
         self.entry.set_max_length(5)  # Assuming the secret word is 5 letters
         self.grid.attach(self.entry, 0, 0, 2, 1)
 
+        # Submit button
         self.submit_button = Gtk.Button(label="Submit")
         self.submit_button.connect("clicked", self.check_guess)
         self.grid.attach(self.submit_button, 2, 0, 1, 1)
 
+        # Result label
         self.result_label = Gtk.Label()
         self.grid.attach(self.result_label, 0, 1, 3, 1)
 
+        # Labels for guesses
         self.guess_labels = []
         for i in range(self.attempts):
             label = Gtk.Label()
