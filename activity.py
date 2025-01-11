@@ -8,6 +8,7 @@ from sugar3.activity import activity
 from sugar3.graphics.toolbarbox import ToolbarBox
 from sugar3.activity.widgets import StopButton
 from sugar3.activity.widgets import ActivityToolbarButton
+from sugar3.graphics.alert import NotifyAlert
 
 class WordleActivity(activity.Activity):
     def __init__(self, handle):
@@ -44,7 +45,7 @@ class WordleActivity(activity.Activity):
         self.add(self.grid)
 
         self.entry = Gtk.Entry()
-        self.entry.set_max_length(len(self.secret_word))  # Limit input length
+        self.entry.set_max_length(5)  # Assuming the secret word is 5 letters
         self.grid.attach(self.entry, 0, 0, 2, 1)
 
         self.submit_button = Gtk.Button(label="Submit")
@@ -84,9 +85,11 @@ class WordleActivity(activity.Activity):
         if guess == self.secret_word:
             self.result_label.set_text("Congratulations! You've guessed the word!")
             self.submit_button.set_sensitive(False)
+            self.show_alert("Congratulations!", "You've guessed the word!")
         elif self.current_attempt >= self.attempts:
             self.result_label.set_text(f"Game Over! The word was: {self.secret_word}")
             self.submit_button.set_sensitive(False)
+            self.show_alert("Game Over", f"The word was: {self.secret_word}")
         else:
             self.result_label.set_text("Try again!")
 
@@ -105,6 +108,14 @@ class WordleActivity(activity.Activity):
                 guess_label.override_background_color(Gtk.StateFlags.NORMAL, Gdk.RGBA(1, 1, 0, 1))  # Yellow
             else:
                 guess_label.override_background_color(Gtk.StateFlags.NORMAL, Gdk.RGBA(1, 0, 0, 1))  # Red
+
+    def show_alert(self, title, message):
+        """Show an alert dialog."""
+        alert = NotifyAlert()
+        alert.props.title = title
+        alert.props.msg = message
+        alert.connect('response', lambda x, y: self.remove_alert(x))
+        self.add_alert(alert)
 
 if __name__ == "__main__":
     activity_instance = WordleActivity()  # This line may need to be adjusted based on your Sugar Activity setup
