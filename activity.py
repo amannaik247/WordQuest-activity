@@ -101,10 +101,11 @@ class WordleActivity(activity.Activity):
             for col in range(5):
                 label = Gtk.Label(label="")
                 label.set_name("cell")
-                label.set_xalign(0.5)  # Horizontal center alignment
-                label.set_yalign(0.5)  # Vertical center alignment
+                label.set_xalign(0.5)  # Center horizontally
+                label.set_yalign(0.5)  # Center vertically
                 self.guess_grid.attach(label, col, row, 1, 1)
         self.guess_grid.show_all()
+
 
 
     def on_submit_guess(self, widget):
@@ -148,7 +149,6 @@ css = b'''
 .cell {
     border: 1px solid black;
     padding: 10px;
-    text-align: center;
 }
 .correct {
     background-color: green;
@@ -163,6 +163,7 @@ css = b'''
     color: white;
 }
 '''
+
 
 style_provider = Gtk.CssProvider()
 style_provider.load_from_data(css)
