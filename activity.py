@@ -12,7 +12,7 @@ from sugar3.activity.widgets import ActivityToolbarButton
 import random
 # from sprites import Sprites, Sprite 
 
-class WordleGame(Gtk.Window):
+class WordleActivity(Gtk.Window):
     def __init__(self):
         super().__init__(title="Wordle Clone")
 
