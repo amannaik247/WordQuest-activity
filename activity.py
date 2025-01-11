@@ -1,7 +1,15 @@
 from sugar3.activity import activity
 from sugar3.graphics.toolbarbox import ToolbarBox
-from sugar3.graphics.toolbutton import ToolButton
 from gi.repository import Gtk, Gdk
+
+import gi
+gi.require_version('Gtk', '3.0')
+from gettext import gettext as _
+
+from sugar3.activity import activity
+from sugar3.graphics.toolbarbox import ToolbarBox
+from sugar3.activity.widgets import StopButton
+from sugar3.activity.widgets import ActivityToolbarButton
 import random
 import os
 
@@ -68,19 +76,6 @@ class WordleActivity(activity.Activity):
         self.new_game()
         self.show_all()
 
-    def build_toolbar(self):
-        """Set up the activity toolbar."""
-        toolbox = ToolbarBox()
-
-        # Stop button
-        stop_button = ToolButton('activity-stop')
-        stop_button.set_tooltip('Stop')
-        stop_button.connect('clicked', self._on_stop_clicked)
-        toolbox.toolbar.insert(stop_button, -1)
-        stop_button.show()
-
-        self.set_toolbar_box(toolbox)
-        toolbox.show()
 
     def _on_stop_clicked(self, widget):
         """Handle the Stop button event."""
