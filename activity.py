@@ -10,8 +10,7 @@ from sugar3.graphics.toolbarbox import ToolbarBox
 from sugar3.activity.widgets import StopButton
 from sugar3.activity.widgets import ActivityToolbarButton
 import random
-from sprites import Sprites, Sprite 
-from constants import WORD_LIST
+# from sprites import Sprites, Sprite 
 
 class WordleGame(Gtk.Window):
     def __init__(self):
