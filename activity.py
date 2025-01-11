@@ -12,9 +12,10 @@ from sugar3.activity.widgets import ActivityToolbarButton
 import random
 # from sprites import Sprites, Sprite 
 
-class WordleActivity(Gtk.Window):
-    def __init__(self):
-        super().__init__(title="Wordle Clone")
+class WordleGame(activity.Activity):
+    def __init__(self, handle):
+        super().__init__(handle)  # Call the parent constructor with the handle
+        self.set_title("Wordle Clone")
 
         # Set up the toolbar
         self.max_participants = 1
@@ -107,7 +108,7 @@ class WordleActivity(Gtk.Window):
                 guess_label.override_background_color(Gtk.StateFlags.NORMAL, Gdk.RGBA(1, 0, 0, 1))  # Red
 
 if __name__ == "__main__":
-    win = WordleGame()
-    win.connect("destroy", Gtk.main_quit)
-    win.show_all()
+    activity_instance = WordleGame()  # This line may need to be adjusted based on your Sugar Activity setup
+    activity_instance.connect("destroy", Gtk.main_quit)
+    activity_instance.show_all()
     Gtk.main()
