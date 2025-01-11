@@ -101,8 +101,11 @@ class WordleActivity(activity.Activity):
             for col in range(5):
                 label = Gtk.Label(label="")
                 label.set_name("cell")
+                label.set_xalign(0.5)  # Horizontal center alignment
+                label.set_yalign(0.5)  # Vertical center alignment
                 self.guess_grid.attach(label, col, row, 1, 1)
         self.guess_grid.show_all()
+
 
     def on_submit_guess(self, widget):
         """Handle guess submission."""
