@@ -106,9 +106,12 @@ class WordleActivity(activity.Activity):
     def on_submit_guess(self, widget):
         """Handle guess submission."""
         guess = self.input_entry.get_text().lower()
-        if len(guess) != 5 or guess not in self.word_list:
-            self.status_label.set_text("Invalid word. Try again.")
-            return
+        
+        # HANDLES GUESSED WORDS IF VALID WORDS OR NOT NEED TO UPDATE WITH A DICTIONARY OF ALL 5 LETTER WORDS: 
+        
+        # if len(guess) != 5 or guess not in self.word_list:
+        #     self.status_label.set_text("Invalid word. Try again.")
+        #     return
 
         self.input_entry.set_text("")
         for col, letter in enumerate(guess):
