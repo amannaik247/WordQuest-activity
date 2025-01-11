@@ -23,7 +23,6 @@ class WordleActivity(activity.Activity):
 
         # Main game layout using Gtk.Grid
         self.grid = Gtk.Grid()
-        self.add(self.grid)
 
         # Set up the toolbar
         toolbar_box = ToolbarBox()
@@ -67,6 +66,7 @@ class WordleActivity(activity.Activity):
             self.guess_labels.append(label)
             self.grid.attach(label, 0, i + 2, 3, 1)
 
+        self.set_canvas(self.grid)  # Set the grid as the main canvas for the activity
         self.show_all()
 
     def load_words(self, filename):
