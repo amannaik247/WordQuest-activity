@@ -107,22 +107,42 @@ class WordleActivity(activity.Activity):
         """Handle guess submission."""
         guess = self.input_entry.get_text().lower()
         
-        # HANDLES GUESSED WORDS IF VALID WORDS OR NOT NEED TO UPDATE WITH A DICTIONARY OF ALL 5 LETTER WORDS: 
-        
+        """ Add all 5 letter word dictionary in this section of the code to check if guess valid word"""
         # if len(guess) != 5 or guess not in self.word_list:
         #     self.status_label.set_text("Invalid word. Try again.")
         #     return
 
         self.input_entry.set_text("")
+
+        # Create mutable lists to track matched positions and remaining letters
+        target_word_counts = {}
+        for letter in self.target_word:
+            target_word_counts[letter] = target_word_counts.get(letter, 0) + 1
+
+        # First pass: mark correct positions (green)
+        feedback = [''] * 5  # Initialize feedback for each letter
         for col, letter in enumerate(guess):
             label = self.guess_grid.get_child_at(col, self.current_row)
             label.set_text(letter.upper())
+
             if letter == self.target_word[col]:
-                label.get_style_context().add_class("correct")
-            elif letter in self.target_word:
-                label.get_style_context().add_class("present")
-            else:
-                label.get_style_context().add_class("absent")
+                feedback[col] = 'correct'
+                target_word_counts[letter] -= 1
+
+        # Second pass: mark present (yellow) and absent (gray)
+        for col, letter in enumerate(guess):
+            if feedback[col] == '':
+                label = self.guess_grid.get_child_at(col, self.current_row)
+                if letter in target_word_counts and target_word_counts[letter] > 0:
+                    feedback[col] = 'present'
+                    target_word_counts[letter] -= 1
+                else:
+                    feedback[col] = 'absent'
+
+        # Apply feedback styles
+        for col, status in enumerate(feedback):
+            label = self.guess_grid.get_child_at(col, self.current_row)
+            label.get_style_context().add_class(status)
 
         self.current_row += 1
 
@@ -132,6 +152,7 @@ class WordleActivity(activity.Activity):
         elif self.current_row == self.max_guesses:
             self.status_label.set_text(f"Game over! The word was: {self.target_word.upper()}")
             self.end_game()
+
 
     def end_game(self):
         """End the current game."""
