@@ -175,7 +175,7 @@ css = b'''
     height: 50px;
     text-align: center;
     font-size: 18px;
-    font-weight: bold;          
+    font-weight: bold;
 }
 .correct {
     background-color: green;
@@ -202,6 +202,7 @@ GtkEntry {
     padding: 5px;
 }
 '''  
+
 
 style_provider = Gtk.CssProvider()
 style_provider.load_from_data(css)
