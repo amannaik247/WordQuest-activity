@@ -133,18 +133,36 @@ class WordleActivity(activity.Activity):
         #     return
 
         self.input_entry.set_text("")
+
+        # Create mutable lists to track matched positions and remaining letters
+        target_word_counts = {}
+        for letter in self.target_word:
+            target_word_counts[letter] = target_word_counts.get(letter, 0) + 1
+
+        # First pass: mark correct positions (green)
+        feedback = [''] * 5  # Initialize feedback for each letter
         for col, letter in enumerate(guess):
             label = self.guess_grid.get_child_at(col, self.current_row)
             label.set_text(letter.upper())
+
             if letter == self.target_word[col]:
-                label.get_style_context().remove_class("default")
-                label.get_style_context().add_class("correct")
-            elif letter in self.target_word:
-                label.get_style_context().remove_class("default")
-                label.get_style_context().add_class("present")
-            else:
-                label.get_style_context().remove_class("default")
-                label.get_style_context().add_class("absent")
+                feedback[col] = 'correct'
+                target_word_counts[letter] -= 1
+
+        # Second pass: mark present (yellow) and absent (gray)
+        for col, letter in enumerate(guess):
+            if feedback[col] == '':
+                label = self.guess_grid.get_child_at(col, self.current_row)
+                if letter in target_word_counts and target_word_counts[letter] > 0:
+                    feedback[col] = 'present'
+                    target_word_counts[letter] -= 1
+                else:
+                    feedback[col] = 'absent'
+
+        # Apply feedback styles
+        for col, status in enumerate(feedback):
+            label = self.guess_grid.get_child_at(col, self.current_row)
+            label.get_style_context().add_class(status)
 
         self.current_row += 1
 
@@ -166,38 +184,54 @@ css = b'''
     font-size: 28px;
     font-weight: bold;
     margin-bottom: 20px;
+    text-align: center;
 }
 .cell {
     border: 2px solid black;
     padding: 20px;
-    border-width: 50px;
-    border-height: 50px;
+    min-width: 50px;
+    min-height: 50px;
     font-size: 18px;
-    font-weight: bold;          
+    font-weight: bold;
+    -gtk-icon-transform: center;
 }
 .correct {
-    background-color: green;
+    background-color: #6aaa64; /* Green for correct letters */
     color: white;
-}
-.present {
-    background-color: yellow;
-    color: black;
-}
-.absent {
-    background-color: gray;
-    color: white;
-}
-.default {
-    background-color: lightgray;
-    color: black;
-}
-GtkButton {
-    font-size: 16px;
-    margin-top: 10px;
-}
-GtkEntry {
-    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #6aaa64;
     padding: 5px;
+}
+
+.present {
+    background-color: #c9b458; /* Yellow for present letters */
+    color: white;
+    border-radius: 4px;
+    border: 1px solid #c9b458;
+    padding: 5px;
+}
+
+.absent {
+    background-color: #787c7e; /* Gray for absent letters */
+    color: white;
+    border-radius: 4px;
+    border: 1px solid #787c7e;
+    padding: 5px;
+}
+
+GtkGrid {
+    grid-row-spacing: 10px;
+    grid-column-spacing: 10px;
+    margin: 20px;
+}
+
+GtkLabel {
+    font-size: 16px;
+    background-color: #d3d6da; /* Default background color for boxes */
+    color: black;
+    border: 1px solid #d3d6da;
+    padding: 10px;
+    border-radius: 4px;
 }
 '''  
 
