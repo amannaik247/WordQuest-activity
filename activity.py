@@ -198,6 +198,7 @@ css = b'''
     padding: 20px;
 }
 .correct {
+    min-height: 500px;
     background-color: #6aaa64;
     color: white;
     border-radius: 4px;
