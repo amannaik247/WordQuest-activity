@@ -217,12 +217,6 @@ css = b'''
     padding: 5px;
 }
 
-GtkGrid {
-    grid-row-spacing: 10px;
-    grid-column-spacing: 10px;
-    margin: 20px;
-}
-
 GtkLabel {
     font-size: 16px;
     background-color: #d3d6da;
