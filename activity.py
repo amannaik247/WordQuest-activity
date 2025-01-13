@@ -131,7 +131,10 @@ class WordleActivity(activity.Activity):
         # if len(guess) != 5 or guess not in self.word_list:
         #     self.status_label.set_text("Invalid word. Try again.")
         #     return
-
+        if len(guess) != 5:
+            self.status_label.set_text(f"{guess.upper()} is not a 5 letter word. Try again.")
+            
+        
         self.input_entry.set_text("")
 
         # Create mutable lists to track matched positions and remaining letters
@@ -188,8 +191,8 @@ css = b'''
 .cell {
     border: 2px solid black;
     padding: 20px;
-    min-width: 100px;
-    min-height: 100px;
+    max-width: 100px;
+    max-height: 100px;
     font-size: 24px;
     font-weight: bold;
 }
