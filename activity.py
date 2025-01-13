@@ -190,10 +190,8 @@ css = b'''
     margin-bottom: 20px;
 }
 .cell {
-    border-top-width: 100px;
-    border-right-width: 100px;
-    border-left-width: 100px;
-    border-bottom-width: 100px;
+    min-width: 500px;
+    min-height: 500px;
     font-size: 24px;
     font-weight: bold;
     border: 2px solid black;
