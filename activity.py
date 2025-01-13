@@ -192,7 +192,6 @@ css = b'''
     min-height: 50px;
     font-size: 18px;
     font-weight: bold;
-    -gtk-icon-transform: center;
 }
 .correct {
     background-color: #6aaa64;
