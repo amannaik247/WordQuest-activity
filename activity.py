@@ -198,8 +198,8 @@ css = b'''
 .correct {
     font-size: 18px;
     font-weight: bold;
-    min-height: 35px;
-    min-width: 35px;
+    min-height: 34px;
+    min-width: 34px;
     background-color: #6aaa64;
     color: white;
     border-radius: 4px;
@@ -210,8 +210,8 @@ css = b'''
 .present {
     font-size: 18px;
     font-weight: bold;
-    min-height: 35px;
-    min-width: 35px;
+    min-height: 34px;
+    min-width: 34px;
     background-color: #c9b458; 
     color: white;
     border-radius: 4px;
@@ -222,8 +222,8 @@ css = b'''
 .absent {
     font-size: 18px;
     font-weight: bold;
-    min-height: 35px;
-    min-width: 35px;
+    min-height: 34px;
+    min-width: 34px;
     background-color: #787c7e; 
     color: white;
     border-radius: 4px;
