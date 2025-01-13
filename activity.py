@@ -187,7 +187,7 @@ css = b'''
 #title {
     font-size: 28px;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 .cell {
     font-size: 20px;
@@ -196,10 +196,10 @@ css = b'''
     padding: 20px;
 }
 .correct {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
-    min-height: 40px;
-    min-width: 40px;
+    min-height: 35px;
+    min-width: 35px;
     background-color: #6aaa64;
     color: white;
     border-radius: 4px;
@@ -208,10 +208,10 @@ css = b'''
 }
 
 .present {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
-    min-height: 40px;
-    min-width: 40px;
+    min-height: 35px;
+    min-width: 35px;
     background-color: #c9b458; 
     color: white;
     border-radius: 4px;
@@ -220,10 +220,10 @@ css = b'''
 }
 
 .absent {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
-    min-height: 40px;
-    min-width: 40px;
+    min-height: 35px;
+    min-width: 35px;
     background-color: #787c7e; 
     color: white;
     border-radius: 4px;
