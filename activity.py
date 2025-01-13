@@ -191,8 +191,10 @@ css = b'''
 .cell {
     border: 2px solid black;
     padding: 20px;
-    max-width: 100px;
-    max-height: 100px;
+    border-top-width: 100px;
+    border-right-width: 100px;
+    border-left-width: 100px;
+    border-bottom-width: 100px;
     font-size: 24px;
     font-weight: bold;
 }
