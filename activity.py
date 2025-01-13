@@ -188,8 +188,8 @@ css = b'''
 .cell {
     border: 2px solid black;
     padding: 20px;
-    min-width: 50px;
-    min-height: 50px;
+    min-width: 100px;
+    min-height: 100px;
     font-size: 24px;
     font-weight: bold;
 }
