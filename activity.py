@@ -190,7 +190,7 @@ css = b'''
     padding: 20px;
     min-width: 50px;
     min-height: 50px;
-    font-size: 18px;
+    font-size: 24px;
     font-weight: bold;
 }
 .correct {
