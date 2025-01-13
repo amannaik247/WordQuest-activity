@@ -166,14 +166,12 @@ css = b'''
     font-size: 28px;
     font-weight: bold;
     margin-bottom: 20px;
-    text-align: center;
 }
 .cell {
     border: 2px solid black;
     padding: 20px;
     width: 50px;
     height: 50px;
-    text-align: center;
     font-size: 18px;
     font-weight: bold;
 }
