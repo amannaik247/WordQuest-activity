@@ -44,7 +44,7 @@ class WordleActivity(activity.Activity):
 
         self.title_label = Gtk.Label(label="Explore Words")
         self.title_label.set_name("title")
-        self.title_label.set_markup("<b><big>Wordle Game</big></b>")
+        self.title_label.set_markup("<b><big>Explore Words</big></b>")
         self.title_label.set_justify(Gtk.Justification.CENTER)
         self.vbox.pack_start(self.title_label, False, False, 0)
 
