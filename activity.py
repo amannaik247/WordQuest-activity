@@ -184,7 +184,6 @@ css = b'''
     font-size: 28px;
     font-weight: bold;
     margin-bottom: 20px;
-    text-align: center;
 }
 .cell {
     border: 2px solid black;
