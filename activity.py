@@ -190,15 +190,14 @@ css = b'''
     margin-bottom: 20px;
 }
 .cell {
-    min-width: 500px;
-    min-height: 500px;
     font-size: 24px;
     font-weight: bold;
     border: 2px solid black;
     padding: 20px;
 }
 .correct {
-    min-height: 500px;
+    min-height: 40px;
+    min-width: 40px;
     background-color: #6aaa64;
     color: white;
     border-radius: 4px;
