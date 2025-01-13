@@ -42,7 +42,7 @@ class WordleActivity(activity.Activity):
         self.vbox.set_border_width(20)
         self.set_canvas(self.vbox)
 
-        self.title_label = Gtk.Label(label="Wordle Game")
+        self.title_label = Gtk.Label(label="Explore Words")
         self.title_label.set_name("title")
         self.title_label.set_markup("<b><big>Wordle Game</big></b>")
         self.title_label.set_justify(Gtk.Justification.CENTER)
