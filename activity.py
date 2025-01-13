@@ -195,7 +195,7 @@ css = b'''
     -gtk-icon-transform: center;
 }
 .correct {
-    background-color: #6aaa64; /* Green for correct letters */
+    background-color: #6aaa64;
     color: white;
     border-radius: 4px;
     border: 1px solid #6aaa64;
@@ -203,7 +203,7 @@ css = b'''
 }
 
 .present {
-    background-color: #c9b458; /* Yellow for present letters */
+    background-color: #c9b458; 
     color: white;
     border-radius: 4px;
     border: 1px solid #c9b458;
@@ -211,7 +211,7 @@ css = b'''
 }
 
 .absent {
-    background-color: #787c7e; /* Gray for absent letters */
+    background-color: #787c7e; 
     color: white;
     border-radius: 4px;
     border: 1px solid #787c7e;
@@ -226,7 +226,7 @@ GtkGrid {
 
 GtkLabel {
     font-size: 16px;
-    background-color: #d3d6da; /* Default background color for boxes */
+    background-color: #d3d6da;
     color: black;
     border: 1px solid #d3d6da;
     padding: 10px;
