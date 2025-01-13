@@ -170,10 +170,10 @@ css = b'''
 .cell {
     border: 2px solid black;
     padding: 20px;
-    width: 50px;
-    height: 50px;
+    border-width: 50px;
+    border-height: 50px;
     font-size: 18px;
-    font-weight: bold;
+    font-weight: bold;          
 }
 .correct {
     background-color: green;
@@ -200,7 +200,6 @@ GtkEntry {
     padding: 5px;
 }
 '''  
-
 
 style_provider = Gtk.CssProvider()
 style_provider.load_from_data(css)
