@@ -190,7 +190,7 @@ css = b'''
     margin-bottom: 20px;
 }
 .cell {
-    font-size: 24px;
+    font-size: 30px;
     font-weight: bold;
     border: 2px solid black;
     padding: 20px;
@@ -206,6 +206,8 @@ css = b'''
 }
 
 .present {
+    min-height: 40px;
+    min-width: 40px;
     background-color: #c9b458; 
     color: white;
     border-radius: 4px;
@@ -214,6 +216,8 @@ css = b'''
 }
 
 .absent {
+    min-height: 40px;
+    min-width: 40px;
     background-color: #787c7e; 
     color: white;
     border-radius: 4px;
