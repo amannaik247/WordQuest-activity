@@ -133,6 +133,7 @@ class WordleActivity(activity.Activity):
         #     return
         if len(guess) != 5:
             self.status_label.set_text(f"{guess.upper()} is not a 5 letter word. Try again.")
+            return
             
         
         self.input_entry.set_text("")
