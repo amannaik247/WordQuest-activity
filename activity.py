@@ -53,12 +53,12 @@ class WordleActivity(activity.Activity):
 
         # List of categories and corresponding files
         self.categories = {
-            "Animals": "animals.txt",
-            "Countries": "countries.txt",
-            "Food": "food.txt",
-            "Sports": "sports.txt",
-            "Technology": "technology.txt",
-            "Movies": "movies.txt"
+            "Animals": "words/animals.txt",
+            "Countries": "words/countries.txt",
+            "Food": "words/food.txt",
+            "Sports": "words/sports.txt",
+            "Technology": "words/technology.txt",
+            "Movies": "words/movies.txt"
         }
 
         # Add category buttons
@@ -256,3 +256,7 @@ GtkLabel {
     border-radius: 4px;
 }
 '''  
+
+style_provider = Gtk.CssProvider()
+style_provider.load_from_data(css)
+Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
