@@ -119,7 +119,7 @@ class WordleActivity(activity.Activity):
         self.input_entry.set_sensitive(True)
         self.submit_button.set_sensitive(True)
 
-    def load_category(self, widget, file_name):
+    def load_category(self, file_name):
         """Load the selected category and start the game."""
         word_list_path = os.path.join(os.path.dirname(__file__), file_name)
         with open(word_list_path, 'r') as f:
