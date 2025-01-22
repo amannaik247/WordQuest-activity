@@ -226,10 +226,10 @@ css = b'''
     font-weight: bold;
     min-height: 34px;
     min-width: 34px;
-    background-color: #6aaa64;
+    background-color: #0066cc;
     color: white;
     border-radius: 4px;
-    border: 1px solid #6aaa64;
+    border: 1px solid #0066cc;
     padding: 5px;
 }
 
@@ -238,10 +238,10 @@ css = b'''
     font-weight: bold;
     min-height: 34px;
     min-width: 34px;
-    background-color: #c9b458; 
+    background-color: #ff9933;
     color: white;
     border-radius: 4px;
-    border: 1px solid #c9b458;
+    border: 1px solid #ff9933;
     padding: 5px;
 }
 
@@ -250,7 +250,7 @@ css = b'''
     font-weight: bold;
     min-height: 34px;
     min-width: 34px;
-    background-color: #787c7e; 
+    background-color: #787c7e;
     color: white;
     border-radius: 4px;
     border: 1px solid #787c7e;
