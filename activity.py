@@ -1,11 +1,15 @@
 from sugar3.activity import activity
 from sugar3.graphics.toolbarbox import ToolbarBox
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 
 import gi
 gi.require_version('Gtk', '3.0')
 from gettext import gettext as _
 
+from sugar3.activity import activity
+from sugar3.graphics.toolbarbox import ToolbarBox
+from sugar3.activity.widgets import StopButton
+from sugar3.activity.widgets import ActivityToolbarButton
 import random
 import os
 
