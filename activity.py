@@ -135,8 +135,8 @@ class WordleActivity(activity.Activity):
         self.guess_grid.foreach(lambda widget: self.guess_grid.remove(widget))
         self.status_label.set_text("")
         self.input_entry.set_text("")
-        self.input_entry.set_sensitive(False)
-        self.submit_button.set_sensitive(False)
+        self.input_entry.set_sensitive(True)
+        self.submit_button.set_sensitive(True)
 
         for row in range(self.max_guesses):
             for col in range(5):
