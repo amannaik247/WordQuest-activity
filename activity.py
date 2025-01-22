@@ -99,15 +99,25 @@ class WordleActivity(activity.Activity):
         self.show_category_screen()
         self.show_all()
 
-    def show_category_screen(self):
-        """Show the category selection screen."""
-        self.title_label.set_text("Select a Category")
-        self.category_buttons.show()
+    def show_category_screen(self, widget=None):
+        """Show the category selection screen and reset game state."""
+        # Reset game state
+        self.guess_grid.foreach(lambda widget: self.guess_grid.remove(widget))
+        self.input_entry.set_text("")
+        self.status_label.set_text("")
+        
+        # Reset UI
+        self.title_label.set_markup("<b><big>Select a Category</big></b>")
+        self.category_buttons.show_all()
         self.guess_grid.hide()
         self.input_entry.hide()
         self.submit_button.hide()
         self.status_label.hide()
         self.new_game_button.hide()
+        
+        # Re-enable input controls
+        self.input_entry.set_sensitive(True)
+        self.submit_button.set_sensitive(True)
 
     def load_category(self, widget, file_name):
         """Load the selected category and start the game."""
