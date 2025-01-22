@@ -1,15 +1,11 @@
 from sugar3.activity import activity
 from sugar3.graphics.toolbarbox import ToolbarBox
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk
 
 import gi
 gi.require_version('Gtk', '3.0')
 from gettext import gettext as _
 
-from sugar3.activity import activity
-from sugar3.graphics.toolbarbox import ToolbarBox
-from sugar3.activity.widgets import StopButton
-from sugar3.activity.widgets import ActivityToolbarButton
 import random
 import os
 
@@ -42,12 +38,32 @@ class WordleActivity(activity.Activity):
         self.vbox.set_border_width(20)
         self.set_canvas(self.vbox)
 
-        self.title_label = Gtk.Label(label="Explore Words")
+        # Category selection screen
+        self.title_label = Gtk.Label(label="Select a Category")
         self.title_label.set_name("title")
-        self.title_label.set_markup("<b><big>Explore Words</big></b>")
-        self.title_label.set_justify(Gtk.Justification.CENTER)
+        self.title_label.set_markup("<b><big>Select a Category</big></b>")
         self.vbox.pack_start(self.title_label, False, False, 0)
 
+        self.category_buttons = Gtk.Box(spacing=10)
+        self.vbox.pack_start(self.category_buttons, False, False, 0)
+
+        # List of categories and corresponding files
+        self.categories = {
+            "Animals": "animals.txt",
+            "Countries": "countries.txt",
+            "Food": "food.txt",
+            "Sports": "sports.txt",
+            "Technology": "technology.txt",
+            "Movies": "movies.txt"
+        }
+
+        # Add category buttons
+        for category, file_name in self.categories.items():
+            button = Gtk.Button(label=category)
+            button.connect("clicked", self.load_category, file_name)
+            self.category_buttons.pack_start(button, True, True, 0)
+
+        # Game UI (hidden initially)
         self.guess_grid = Gtk.Grid()
         self.guess_grid.set_row_spacing(5)
         self.guess_grid.set_column_spacing(5)
@@ -73,37 +89,32 @@ class WordleActivity(activity.Activity):
 
         self.new_game_button = Gtk.Button(label="New Game")
         self.new_game_button.set_halign(Gtk.Align.CENTER)
-        self.new_game_button.connect("clicked", self.new_game)
+        self.new_game_button.connect("clicked", self.show_category_screen)
         self.vbox.pack_start(self.new_game_button, False, False, 0)
 
-        # Load the word list
-        word_list_path = os.path.join(os.path.dirname(__file__), 'wordlist.txt')
+        self.show_category_screen()
+        self.show_all()
+
+    def show_category_screen(self):
+        """Show the category selection screen."""
+        self.title_label.set_text("Select a Category")
+        self.category_buttons.show()
+        self.guess_grid.hide()
+        self.input_entry.hide()
+        self.submit_button.hide()
+        self.status_label.hide()
+        self.new_game_button.hide()
+
+    def load_category(self, widget, file_name):
+        """Load the selected category and start the game."""
+        word_list_path = os.path.join(os.path.dirname(__file__), file_name)
         with open(word_list_path, 'r') as f:
             self.word_list = [line.strip().lower() for line in f if len(line.strip()) == 5]
 
-        self.new_game()
-        self.show_all()
+        self.start_game()
 
-    def build_toolbar(self):
-        """Set up the activity toolbar."""
-        toolbox = ToolbarBox()
-
-        # Stop button
-        stop_button = ToolButton('activity-stop')
-        stop_button.set_tooltip('Stop')
-        stop_button.connect('clicked', self._on_stop_clicked)
-        toolbox.toolbar.insert(stop_button, -1)
-        stop_button.show()
-
-        self.set_toolbar_box(toolbox)
-        toolbox.show()
-
-    def _on_stop_clicked(self, widget):
-        """Handle the Stop button event."""
-        self.close()
-
-    def new_game(self, widget=None):
-        """Start a new game."""
+    def start_game(self):
+        """Initialize the game UI."""
         self.target_word = random.choice(self.word_list)
         self.current_row = 0
         self.max_guesses = 6
@@ -121,21 +132,22 @@ class WordleActivity(activity.Activity):
                 self.guess_grid.attach(label, col, row, 1, 1)
         self.guess_grid.show_all()
 
-
+        self.title_label.set_text("Explore Words")
+        self.category_buttons.hide()
+        self.guess_grid.show()
+        self.input_entry.show()
+        self.submit_button.show()
+        self.status_label.show()
+        self.new_game_button.show()
 
     def on_submit_guess(self, widget):
         """Handle guess submission."""
         guess = self.input_entry.get_text().lower()
-        
-        """ Add all 5 letter word dictionary in this section of the code to check if guess valid word"""
-        # if len(guess) != 5 or guess not in self.word_list:
-        #     self.status_label.set_text("Invalid word. Try again.")
-        #     return
+
         if len(guess) != 5:
-            self.status_label.set_text(f"{guess.upper()} is not a 5 letter word. Try again.")
+            self.status_label.set_text(f"{guess.upper()} is not a 5-letter word. Try again.")
             return
-            
-        
+
         self.input_entry.set_text("")
 
         # Create mutable lists to track matched positions and remaining letters
@@ -144,7 +156,7 @@ class WordleActivity(activity.Activity):
             target_word_counts[letter] = target_word_counts.get(letter, 0) + 1
 
         # First pass: mark correct positions (green)
-        feedback = [''] * 5  # Initialize feedback for each letter
+        feedback = [''] * 5
         for col, letter in enumerate(guess):
             label = self.guess_grid.get_child_at(col, self.current_row)
             label.set_text(letter.upper())
@@ -240,7 +252,3 @@ GtkLabel {
     border-radius: 4px;
 }
 '''  
-
-style_provider = Gtk.CssProvider()
-style_provider.load_from_data(css)
-Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
