@@ -100,7 +100,7 @@ class WordleActivity(activity.Activity):
         self.vbox.pack_start(self.new_game_button, False, False, 0)
         
         # Dictionary button
-        self.dictionary_button = Gtk.Button(label="D")
+        self.dictionary_button = Gtk.Button(label="📖")
         self.dictionary_button.set_tooltip_text("Open Dictionary")
         self.dictionary_button.set_halign(Gtk.Align.END)
         self.dictionary_button.set_valign(Gtk.Align.END)
