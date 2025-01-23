@@ -1,8 +1,8 @@
 [Activity]
-name = Wordle
+name = WordQuest
 activity_version = 1
-bundle_id = org.sugarlabs.Wordle
-exec = sugar-activity3 activity.WordleActivity
+bundle_id = org.sugarlabs.WordQuest
+exec = sugar-activity3 activity.WordQuestActivity
 icon = activity-helloworld
 license = GPLv3+
-repository = https://github.com/amannaik247/Wordle.activity.git
+repository = https://github.com/amannaik247/WordQuest-activity.git

@@ -13,9 +13,9 @@ from sugar3.activity.widgets import ActivityToolbarButton
 import random
 import os
 
-class WordleActivity(activity.Activity):
+class WordQuestActivity(activity.Activity):
     def __init__(self, handle):
-        super(WordleActivity, self).__init__(handle)
+        super(WordQuestActivity, self).__init__(handle)
         
         # Initialize dictionary file path
         self.dictionary_file = os.path.join(os.path.dirname(__file__), 'words/own_dictionary.txt')
@@ -56,11 +56,11 @@ class WordleActivity(activity.Activity):
 
         # List of categories and corresponding files
         self.categories = {
-            "Animals": "words/animals.txt",
-            "Countries": "words/countries.txt",
-            "Fruits": "words/fruits.txt",
-            "Sports": "words/sports.txt",
-            "Movies": "words/movies.txt"
+            "Animal": "words/animals.txt",
+            "Country": "words/countries.txt",
+            "Fruit": "words/fruits.txt",
+            "Sport": "words/sports.txt",
+            "Movie": "words/movies.txt"
         }
 
         # Add category buttons
@@ -160,7 +160,7 @@ class WordleActivity(activity.Activity):
                 self.guess_grid.attach(label, col, row, 1, 1)
         self.guess_grid.show_all()
 
-        self.title_label.set_text(f"Category: {self.current_category}")
+        self.title_label.set_text(f"Guess the {self.current_category}")
         self.category_buttons.hide()
         self.guess_grid.show()
         self.input_entry.show()
