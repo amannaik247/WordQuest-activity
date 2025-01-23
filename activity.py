@@ -59,8 +59,7 @@ class WordQuestActivity(activity.Activity):
             "Animal": "words/animals.txt",
             "Country": "words/countries.txt",
             "Fruit": "words/fruits.txt",
-            "Sport": "words/sports.txt",
-            "Movie": "words/movies.txt"
+            "AnyType": "words/allwords.txt" 
         }
 
         # Add category buttons
