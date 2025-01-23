@@ -7,6 +7,7 @@
 - **Word Guessing**: Get feedback with colored hints for correct, present, or absent letters.
 - **Personal Dictionary**: Save and review new words you’ve learned.
 - **Intuitive Design**: Simple and user-friendly interface for all ages.
+### Many more interesting and interactive features coming soon!
 
 ## How to Play
 1. Launch the game and select a category.
