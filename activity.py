@@ -95,9 +95,17 @@ class WordleActivity(activity.Activity):
         self.new_game_button.set_halign(Gtk.Align.CENTER)
         self.new_game_button.connect("clicked", self.show_category_screen)
         self.vbox.pack_start(self.new_game_button, False, False, 0)
+        
+        # Dictionary button
+        self.dictionary_button = Gtk.Button(label="📖")
+        self.dictionary_button.set_tooltip_text("Open Dictionary")
+        self.dictionary_button.set_halign(Gtk.Align.END)
+        self.dictionary_button.set_valign(Gtk.Align.END)
+        self.dictionary_button.connect("clicked", self.open_dictionary)
+        self.vbox.pack_end(self.dictionary_button, False, False, 0)
 
         self.show_category_screen()
-        self.show_all()
+        # self.show_all()
 
     def show_category_screen(self, widget=None):
         """Show the category selection screen and reset game state."""
@@ -130,6 +138,7 @@ class WordleActivity(activity.Activity):
     def start_game(self):
         """Initialize the game UI."""
         self.target_word = random.choice(self.word_list)
+        self.learnt_word = self.target_word.copy()
         self.current_row = 0
         self.max_guesses = 6
         self.guess_grid.foreach(lambda widget: self.guess_grid.remove(widget))
@@ -207,6 +216,23 @@ class WordleActivity(activity.Activity):
         """End the current game."""
         self.input_entry.set_sensitive(False)
         self.submit_button.set_sensitive(False)
+        
+    def open_dictionary(self, widget):
+        """Open the dictionary window."""
+        dictionary_window = Gtk.Window(title="Learned Words Dictionary")
+        dictionary_window.set_default_size(300, 400)
+
+        vbox = Gtk.VBox(spacing=10)
+        vbox.set_border_width(10)
+        for word in sorted(self.learned_words):
+            label = Gtk.Label(label=word.upper())
+            vbox.pack_start(label, False, False, 0)
+
+        scroll = Gtk.ScrolledWindow()
+        scroll.add(vbox)
+        dictionary_window.add(scroll)
+
+        dictionary_window.show_all()
 
 # Styling using CSS
 css = b'''
