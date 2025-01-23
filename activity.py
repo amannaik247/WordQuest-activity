@@ -138,8 +138,8 @@ class WordleActivity(activity.Activity):
     def start_game(self):
         """Initialize the game UI."""
         self.target_word = random.choice(self.word_list)
-        self.learned_word = []
-        self.learned_word.append(self.target_word)
+        self.learned_words = []
+        self.learned_words.append(self.target_word)
         self.current_row = 0
         self.max_guesses = 6
         self.guess_grid.foreach(lambda widget: self.guess_grid.remove(widget))
