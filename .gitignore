@@ -6,3 +6,6 @@ locale/
 .gitignore
 example.py
 sugar-toolkit-gtk3
+feature_ideas.md
+hello-world-fork
+wordlist.txt
