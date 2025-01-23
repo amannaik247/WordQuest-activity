@@ -131,6 +131,9 @@ class WordleActivity(activity.Activity):
 
     def load_category(self, widget, file_name):
         """Load the selected category and start the game."""
+        # Get the category name from the button label
+        self.current_category = widget.get_label()
+        
         word_list_path = os.path.join(os.path.dirname(__file__), file_name)
         with open(word_list_path, 'r') as f:
             self.word_list = [line.strip().lower() for line in f if len(line.strip()) == 5]
@@ -157,7 +160,7 @@ class WordleActivity(activity.Activity):
                 self.guess_grid.attach(label, col, row, 1, 1)
         self.guess_grid.show_all()
 
-        self.title_label.set_text("Explore Words")
+        self.title_label.set_text(f"Category: {self.current_category}")
         self.category_buttons.hide()
         self.guess_grid.show()
         self.input_entry.show()
