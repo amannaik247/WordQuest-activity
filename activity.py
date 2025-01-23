@@ -16,7 +16,10 @@ import os
 class WordleActivity(activity.Activity):
     def __init__(self, handle):
         super(WordleActivity, self).__init__(handle)
-
+        
+        # Initialize dictionary file path
+        self.dictionary_file = os.path.join(os.path.dirname(__file__), 'words/own_dictionary.txt')
+        
         # Set up the toolbar
         self.max_participants = 1
         toolbar_box = ToolbarBox()
@@ -138,8 +141,7 @@ class WordleActivity(activity.Activity):
     def start_game(self):
         """Initialize the game UI."""
         self.target_word = random.choice(self.word_list)
-        self.learned_words = []
-        self.learned_words.append(self.target_word)
+        self.save_to_dictionary(self.target_word)
         self.current_row = 0
         self.max_guesses = 6
         self.guess_grid.foreach(lambda widget: self.guess_grid.remove(widget))
@@ -218,21 +220,37 @@ class WordleActivity(activity.Activity):
         self.input_entry.set_sensitive(False)
         self.submit_button.set_sensitive(False)
         
+    def save_to_dictionary(self, word):
+        """Save word to dictionary file."""
+        try:
+            os.makedirs(os.path.dirname(self.dictionary_file), exist_ok=True)
+            with open(self.dictionary_file, 'a') as f:
+                f.write(word.lower() + '\n')
+        except Exception as e:
+            print(f"Error saving to dictionary: {e}")
+
     def open_dictionary(self, widget):
         """Open the dictionary window."""
-        dictionary_window = Gtk.Window(title="Learned Words Dictionary")
+        dictionary_window = Gtk.Window(title="My Word Dictionary")
         dictionary_window.set_default_size(300, 400)
 
         vbox = Gtk.VBox(spacing=10)
         vbox.set_border_width(10)
-        for word in sorted(self.learned_words):
-            label = Gtk.Label(label=word.upper())
-            vbox.pack_start(label, False, False, 0)
+        
+        try:
+            if os.path.exists(self.dictionary_file):
+                with open(self.dictionary_file, 'r') as f:
+                    words = sorted(set(line.strip().lower() for line in f))
+                    for word in words:
+                        label = Gtk.Label(label=word.upper())
+                        vbox.pack_start(label, False, False, 0)
+        except Exception as e:
+            error_label = Gtk.Label(label=f"Error loading dictionary: {e}")
+            vbox.pack_start(error_label, False, False, 0)
 
         scroll = Gtk.ScrolledWindow()
         scroll.add(vbox)
         dictionary_window.add(scroll)
-
         dictionary_window.show_all()
 
 # Styling using CSS
