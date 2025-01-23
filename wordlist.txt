@@ -7,3 +7,5 @@ mango
 lemon
 plumb
 guava
+
+# Animals, countries, fruits

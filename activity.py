@@ -58,9 +58,8 @@ class WordleActivity(activity.Activity):
         self.categories = {
             "Animals": "words/animals.txt",
             "Countries": "words/countries.txt",
-            "Food": "words/food.txt",
+            "Fruits": "words/fruits.txt",
             "Sports": "words/sports.txt",
-            "Technology": "words/technology.txt",
             "Movies": "words/movies.txt"
         }
 
