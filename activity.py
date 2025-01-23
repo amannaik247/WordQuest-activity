@@ -105,7 +105,7 @@ class WordleActivity(activity.Activity):
         self.vbox.pack_end(self.dictionary_button, False, False, 0)
 
         self.show_category_screen()
-        # self.show_all()
+        self.show_all()
 
     def show_category_screen(self, widget=None):
         """Show the category selection screen and reset game state."""
