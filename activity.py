@@ -12,10 +12,14 @@ from sugar3.activity.widgets import StopButton
 from sugar3.activity.widgets import ActivityToolbarButton
 import random
 import os
+from dictionary_manager import DictionaryManager
 
 class WordQuestActivity(activity.Activity):
     def __init__(self, handle):
         super(WordQuestActivity, self).__init__(handle)
+        
+        # Initialize dictionary manager
+        self.dict_manager = DictionaryManager()
         
         # Initialize dictionary file path
         self.dictionary_file = os.path.join(os.path.dirname(__file__), 'words/own_dictionary.txt')
@@ -222,37 +226,86 @@ class WordQuestActivity(activity.Activity):
         self.submit_button.set_sensitive(False)
         
     def save_to_dictionary(self, word):
-        """Save word to dictionary file."""
+        """Save word to dictionary file with mastery tracking."""
         try:
-            os.makedirs(os.path.dirname(self.dictionary_file), exist_ok=True)
-            with open(self.dictionary_file, 'a') as f:
-                f.write(word.lower() + '\n')
+            self.dict_manager.add_word(word.lower())
         except Exception as e:
             print(f"Error saving to dictionary: {e}")
 
     def open_dictionary(self, widget):
-        """Open the dictionary window."""
+        """Open the dictionary window with mastery levels."""
         dictionary_window = Gtk.Window(title="My Word Dictionary")
         dictionary_window.set_default_size(300, 400)
 
-        vbox = Gtk.VBox(spacing=10)
-        vbox.set_border_width(10)
+        # Create main container
+        main_box = Gtk.VBox(spacing=10)
+        main_box.set_border_width(10)
+
+        # Add header with legend
+        header_box = Gtk.HBox(spacing=10)
+        header_box.set_margin_bottom(10)
+        
+        # Add legend labels
+        legend_labels = [
+            ("New", "#787c7e"),
+            ("Learnt", "#ff9933"),
+            ("Mastered", "#0066cc")
+        ]
+        
+        for text, color in legend_labels:
+            label = Gtk.Label()
+            label.set_markup(
+                f'<span background="{color}" foreground="white" '
+                f'weight="bold"> {text} </span>'
+            )
+            header_box.pack_start(label, False, False, 5)
+        
+        main_box.pack_start(header_box, False, False, 0)
+
+        # Add word list
+        words_box = Gtk.VBox(spacing=5)
         
         try:
-            if os.path.exists(self.dictionary_file):
-                with open(self.dictionary_file, 'r') as f:
-                    words = sorted(set(line.strip().lower() for line in f))
-                    for word in words:
-                        label = Gtk.Label(label=word.upper())
-                        vbox.pack_start(label, False, False, 0)
+            words = self.dict_manager.get_all_words()
+            for word in words:
+                # Create a horizontal box for each word and its tag
+                hbox = Gtk.HBox(spacing=10)
+                
+                # Word label
+                word_label = Gtk.Label(label=word.upper())
+                word_label.set_halign(Gtk.Align.START)
+                hbox.pack_start(word_label, True, True, 0)
+                
+                # Mastery level tag
+                mastery_level = self.dict_manager.get_mastery_level(word)
+                tag_label = Gtk.Label()
+                tag_label.set_markup(
+                    f'<span background="{self._get_tag_color(mastery_level)}" '
+                    f'foreground="white" weight="bold"> {mastery_level} </span>'
+                )
+                hbox.pack_end(tag_label, False, False, 0)
+                
+                words_box.pack_start(hbox, False, False, 0)
         except Exception as e:
             error_label = Gtk.Label(label=f"Error loading dictionary: {e}")
-            vbox.pack_start(error_label, False, False, 0)
+            words_box.pack_start(error_label, False, False, 0)
 
+        # Add scrolled window
         scroll = Gtk.ScrolledWindow()
-        scroll.add(vbox)
-        dictionary_window.add(scroll)
+        scroll.add(words_box)
+        main_box.pack_start(scroll, True, True, 0)
+
+        dictionary_window.add(main_box)
         dictionary_window.show_all()
+
+    def _get_tag_color(self, mastery_level):
+        """Get the color for mastery level tag."""
+        colors = {
+            "new": "#787c7e",      # Gray
+            "learnt": "#ff9933",   # Orange
+            "mastered": "#0066cc"  # Blue
+        }
+        return colors.get(mastery_level, "#787c7e")
 
 # Styling using CSS
 css = b'''
