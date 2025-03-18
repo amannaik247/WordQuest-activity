@@ -146,7 +146,8 @@ class WordQuestActivity(activity.Activity):
     def start_game(self):
         """Initialize the game UI."""
         self.target_word = random.choice(self.word_list)
-        self.save_to_dictionary(self.target_word)
+        # Mark the word as seen when it becomes the target word
+        self.dict_manager.mark_word_seen(self.target_word)
         self.current_row = 0
         self.max_guesses = 6
         self.guess_grid.foreach(lambda widget: self.guess_grid.remove(widget))
@@ -215,6 +216,8 @@ class WordQuestActivity(activity.Activity):
 
         if guess == self.target_word:
             self.status_label.set_text("Congratulations! You guessed the word.")
+            # Mark word as correctly guessed only when the user wins
+            self.dict_manager.mark_word_guessed(self.target_word)
             self.end_game()
         elif self.current_row == self.max_guesses:
             self.status_label.set_text(f"Game over! The word was: {self.target_word.upper()}")
