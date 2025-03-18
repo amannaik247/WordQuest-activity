@@ -1,6 +1,6 @@
 # Word Quest - Learn and test your vocabulary
 
-**Word Explorer** is an engaging and educational word-guessing game where players try to guess a 5-letter target word within six attempts. It also helps players learn new words by saving them in a personal dictionary.
+**Word Quest** is an engaging and educational word-guessing game where players try to guess a 5-letter target word within six attempts. It also helps players learn new words by saving them in a personal dictionary.
 
 ## Features
 - **Category Selection**: Choose from six different categories for a customized word list.
